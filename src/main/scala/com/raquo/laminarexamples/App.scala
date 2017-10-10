@@ -1,6 +1,10 @@
 package com.raquo.laminarexamples
 
+import com.raquo.laminar.emitter.EventBus
 import com.raquo.laminar.render
+import com.raquo.laminarexamples.todomvc.backend.RestBackend.Request
+import com.raquo.laminarexamples.todomvc.backend.TaskBackend
+import com.raquo.laminarexamples.todomvc.models.TaskModel
 import com.raquo.laminarexamples.todomvc.views.TaskListView
 import org.scalajs.dom
 import org.scalajs.dom.document
@@ -17,6 +21,9 @@ object App extends js.JSApp {
       val container = document.getElementById("app-container")
       container.textContent = ""
 
-      render(container, new TaskListView().node)
+      val requestBus = new EventBus[Request[TaskModel]]
+      val backend = new TaskBackend(requestBus)
+
+      render(container, new TaskListView(backend).node)
     })
   }}

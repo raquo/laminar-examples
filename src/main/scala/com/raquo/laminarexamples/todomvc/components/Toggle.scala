@@ -2,24 +2,30 @@ package com.raquo.laminarexamples.todomvc.components
 
 import com.raquo.laminar.implicits._
 import com.raquo.laminar.nodes.ReactiveElement
+import com.raquo.laminar.props.textContent
 import com.raquo.laminar.tags._
 import com.raquo.laminar.attrs._
+import com.raquo.laminar.emitter.EventBus
 import com.raquo.laminar.events.onClick
 import com.raquo.xstream.XStream
 import org.scalajs.dom
+import org.scalajs.dom.raw.MouseEvent
 
 import scala.util.Random
 
 class Toggle private (
-  val $checked: XStream[Boolean],
+  val $checkedRequest: XStream[Boolean],
   val node: ReactiveElement[dom.html.Span]
 )
 
 object Toggle {
 
   // @TODO how do we make this a controlled component?
-  def apply(initialChecked: Boolean, caption: String): Toggle = {
-    val $click = XStream.create[dom.MouseEvent]()
+  def apply(
+    $checked: XStream[Boolean],
+    $caption: XStream[String]
+  ): Toggle = {
+    val clickBus = new EventBus[MouseEvent]
 
     // This will only be evaluated once
     val inputId = "toggle" + Random.nextInt(99)
@@ -28,11 +34,11 @@ object Toggle {
       id := inputId,
       cls := "red",
       typ := "checkbox",
-      checked := initialChecked,
-      onClick --> $click
+      checked <-- $checked,
+      onClick --> clickBus
     )
 
-    val $checked = $click.map(_ => checkbox.ref.checked)
+    val $checkedRequest = clickBus.$.map(_ => checkbox.ref.checked) // @TODO this will change once we have
 
     // @TODO this implicit conversion is ugly, <-- should pick up on it
     // @TODO or... maybe we should rather document textContent? Wait... textContent actually clears the rest of the content in the element...
@@ -42,9 +48,9 @@ object Toggle {
     val node = span(
       cls := "Toggle",
       checkbox,
-      label(forId := inputId, caption)
+      label(forId := inputId, textContent <-- $caption)
     )
 
-    new Toggle($checked, node)
+    new Toggle($checkedRequest, node)
   }
 }

@@ -2,6 +2,7 @@ package com.raquo.laminarexamples.components
 
 import com.raquo.laminar.attrs._
 import com.raquo.laminar.child
+import com.raquo.laminar.emitter.EventBus
 import com.raquo.laminar.events._
 import com.raquo.laminar.implicits._
 import com.raquo.laminar.nodes.ReactiveElement
@@ -20,8 +21,8 @@ class Toggle private (
 object Toggle {
   // @TODO how do we make this a controlled component?
   def apply(caption: String = "TOGGLE MEEEE"): Toggle = {
-    val $click = XStream.create[MouseEvent]()
-    val $checked = $click.map(ev => ev.target.asInstanceOf[HTMLInputElement].checked)//.debug("$checked")
+    val clickBus = new EventBus[MouseEvent]
+    val $checked = clickBus.$.map(ev => ev.target.asInstanceOf[HTMLInputElement].checked)//.debug("$checked")
 
     // This will only be evaluated once
     val rand = Random.nextInt(99)
@@ -30,7 +31,7 @@ object Toggle {
       id := "toggle" + rand,
       cls := "red",
       `type` := "checkbox",
-      onClick --> $click
+      onClick --> clickBus
     )
 
     val $captionNode = $checked.map(checked => span(if (checked) "ON" else "off"))
