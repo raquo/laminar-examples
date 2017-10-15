@@ -10,15 +10,25 @@ trait RestBackend[Model] {
 
   val $response: XStream[Response[Model]]
 
-  lazy val $listResponse: XStream[ListResponse[Model]] = $response.filterByType[ListResponse[Model]]
+  lazy val $listResponse: XStream[ListResponse[Model]] = $response.collect {
+    case response: ListResponse[Model @unchecked] => response
+  }
 
-  lazy val $readResponse: XStream[ReadResponse[Model]] = $response.filterByType[ReadResponse[Model]]
+  lazy val $readResponse: XStream[ReadResponse[Model]] = $response.collect {
+    case response: ReadResponse[Model @unchecked] => response
+  }
 
-  lazy val $createResponse: XStream[CreateResponse[Model]] = $response.filterByType[CreateResponse[Model]]
+  lazy val $createResponse: XStream[CreateResponse[Model]] = $response.collect {
+    case response: CreateResponse[Model @unchecked] => response
+  }
 
-  lazy val $updateResponse: XStream[UpdateResponse[Model]] = $response.filterByType[UpdateResponse[Model]]
+  lazy val $updateResponse: XStream[UpdateResponse[Model]] = $response.collect {
+    case response: UpdateResponse[Model @unchecked] => response
+  }
 
-  lazy val $deleteResponse: XStream[DeleteResponse[Model]] = $response.filterByType[DeleteResponse[Model]]
+  lazy val $deleteResponse: XStream[DeleteResponse[Model]] = $response.collect {
+    case response: DeleteResponse[Model @unchecked] => response
+  }
 }
 
 object RestBackend {

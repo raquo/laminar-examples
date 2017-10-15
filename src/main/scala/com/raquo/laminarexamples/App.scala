@@ -24,6 +24,6 @@ object App extends js.JSApp {
       val requestBus = new EventBus[Request[TaskModel]]
       val backend = new TaskBackend(requestBus)
 
-      render(container, new TaskListView(backend).node)
+      render(container, TaskListView(backend).node)
     })
   }}
