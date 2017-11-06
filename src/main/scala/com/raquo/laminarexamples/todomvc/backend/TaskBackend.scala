@@ -21,22 +21,17 @@ class TaskBackend(val requestBus: EventBus[Request[TaskModel]]) extends RestBack
   def processRequest(request: Request[TaskModel]): Response[TaskModel] = {
     request match {
       case ReadRequest(modelId) =>
-        dom.console.log(s"READ $modelId")
         ReadResponse(request, items(modelId))
       case ListRequest() =>
-        dom.console.log("LIST")
         ListResponse(request, items.values)
       case CreateRequest(model) =>
-        dom.console.log(s"CREATE (id=${model.id}, completed=${model.isCompleted}, text=${model.text})")
         items = items + ((model.id, model))
         CreateResponse(request, model)
       case UpdateRequest(model) =>
-        dom.console.log(s"UPDATE (id=${model.id}, completed=${model.isCompleted}, text=${model.text})")
         items = items.updated(model.id, model)
         UpdateResponse(request, model)
       case DeleteRequest(model) =>
         // @TODO this should just accept modelId
-        dom.console.log(s"DELETE (id=${model.id}, completed=${model.isCompleted}, text=${model.text})")
         items = items - model.id
         DeleteResponse(request, model)
     }

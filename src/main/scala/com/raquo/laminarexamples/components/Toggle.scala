@@ -1,12 +1,8 @@
 package com.raquo.laminarexamples.components
 
-import com.raquo.laminar.attrs._
-import com.raquo.laminar.child
+import com.raquo.laminar.bundle._
 import com.raquo.laminar.emitter.EventBus
-import com.raquo.laminar.events._
-import com.raquo.laminar.implicits._
 import com.raquo.laminar.nodes.ReactiveElement
-import com.raquo.laminar.tags._
 import com.raquo.xstream.XStream
 import org.scalajs.dom
 import org.scalajs.dom.raw.{HTMLInputElement, MouseEvent}
@@ -29,7 +25,7 @@ object Toggle {
 
     val checkbox = input.apply(
       id := "toggle" + rand,
-      cls := "red",
+      className := "red",
       `type` := "checkbox",
       onClick --> clickBus
     )
@@ -37,7 +33,7 @@ object Toggle {
     val $captionNode = $checked.map(checked => span(if (checked) "ON" else "off"))
 
     val node = div(
-      cls := "Toggle",
+      className := "Toggle",
       checkbox,
       label(forId := "toggle" + rand, caption),
       " — ",

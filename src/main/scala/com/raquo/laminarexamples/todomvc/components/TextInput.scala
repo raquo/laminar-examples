@@ -2,10 +2,8 @@ package com.raquo.laminarexamples.todomvc.components
 
 import com.raquo.dombuilder.generic.modifiers.ModifierSeq
 import com.raquo.domtypes.generic.Modifier
-import com.raquo.laminar.attrs.typ
-import com.raquo.laminar.implicits._
+import com.raquo.laminar.bundle._
 import com.raquo.laminar.nodes.ReactiveElement
-import com.raquo.laminar.tags.input
 import org.scalajs.dom
 
 object TextInput {

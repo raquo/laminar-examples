@@ -1,10 +1,7 @@
 package com.raquo.laminarexamples.pseudotests
 
-import com.raquo.laminar.child
-import com.raquo.laminar.implicits._
+import com.raquo.laminar.bundle._
 import com.raquo.laminar.nodes.ReactiveElement
-import com.raquo.laminar.styles._
-import com.raquo.laminar.tags._
 import com.raquo.laminarexamples.components.Toggle
 import com.raquo.xstream.XStream
 import org.scalajs.dom

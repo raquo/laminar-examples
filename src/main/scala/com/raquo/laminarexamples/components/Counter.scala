@@ -1,12 +1,8 @@
 package com.raquo.laminarexamples.components
 
-import com.raquo.laminar.attrs.cls
-import com.raquo.laminar.child
+import com.raquo.laminar.bundle._
 import com.raquo.laminar.emitter.EventBus
-import com.raquo.laminar.events.onClick
-import com.raquo.laminar.implicits._
 import com.raquo.laminar.nodes.ReactiveNode
-import com.raquo.laminar.tags.{button, div, span}
 import com.raquo.xstream.{MemoryStream, XStream}
 import org.scalajs.dom
 
@@ -26,7 +22,7 @@ object Counter {
       .debugWithLabel("$count")
 
     val node = div(
-      cls := "Counter",
+      className := "Counter",
       button(onClick --> decClickBus, "–"),
       child <-- $count.map(count => span(s" :: $count ($label) :: ")),
       button(onClick --> incClickBus, "+")
