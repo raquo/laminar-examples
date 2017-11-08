@@ -1,12 +1,8 @@
 package com.raquo.laminarexamples.todomvc.views
 
-import com.raquo.laminar.attrs.autoFocus
+import com.raquo.laminar.bundle._
 import com.raquo.laminar.emitter.EventBus.WriteBus
-import com.raquo.laminar.events.{onClick, _}
-import com.raquo.laminar.implicits._
 import com.raquo.laminar.nodes.ReactiveElement
-import com.raquo.laminar.tags._
-import com.raquo.laminar.{children, focus, props}
 import com.raquo.laminarexamples.todomvc.backend.RestBackend.{CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, UpdateRequest}
 import com.raquo.laminarexamples.todomvc.backend.TaskBackend
 import com.raquo.laminarexamples.todomvc.components.TextInput
@@ -45,15 +41,15 @@ object TaskListView {
       .filter(taskName => taskName != "")
       .map(taskName => CreateRequest(TaskModel(text = taskName)))
 
-    val updateModelBus = taskBackend.requestBus.map[TaskModel](UpdateRequest(_))
-    val deleteModelBus = taskBackend.requestBus.map[TaskModel](DeleteRequest(_))
+    val updateBus = taskBackend.requestBus.map[TaskModel](UpdateRequest(_))
+    val deleteBus = taskBackend.requestBus.map[TaskModel](DeleteRequest(_))
     taskBackend.requestBus.addSource($addTaskRequest) // @TODO this needs to be removed when destroying/unmounting this component? or maybe implemented addSource differently?
 
-    val $taskViewsDiff = taskViewsStream(taskBackend, updateModelBus, deleteModelBus)
+    val $taskViewsDiff = taskViewsStream(taskBackend, updateBus, deleteBus)
 
-    newTaskInput <-- focus <-- $addTaskRequest.mapTo(true)
+    newTaskInput <-- focus <-- $addTaskRequest.mapTo(true) // @TODO also do this on validation failure
 
-    newTaskInput <-- props.value <-- $addTaskRequest.mapTo("")
+    newTaskInput <-- value <-- $addTaskRequest.mapTo("")
 
     node <-- children <-- $taskViewsDiff.map(_._2.map(_.node))
 
@@ -64,8 +60,8 @@ object TaskListView {
 
   private def taskViewsStream(
     taskBackend: TaskBackend,
-    updateModelBus: WriteBus[TaskModel],
-    deleteModelBus: WriteBus[TaskModel]
+    updateBus: WriteBus[TaskModel],
+    deleteBus: WriteBus[TaskModel]
   ): XStream[(Vector[TaskView], Vector[TaskView])] = {
 
     // @TODO Note: this can also be implemented with ChildrenCommandReceiver, even a bit easier.
@@ -82,9 +78,9 @@ object TaskListView {
             case CreateResponse(_, newTask) =>
               val newTaskView = TaskView(
                 taskId = newTask.id,
-                taskBackend.$updateResponse.filter(_.model.id == newTask.id).map(_.model).startWith(newTask),
-                updateModelBus = updateModelBus,
-                deleteModelBus = deleteModelBus
+                $task = taskBackend.$updateResponse.filter(_.model.id == newTask.id).map(_.model).startWith(newTask),
+                updateBus = updateBus,
+                deleteBus = deleteBus
               )
               prevTaskViews :+ newTaskView
             case DeleteResponse(_, deletedTask) =>
