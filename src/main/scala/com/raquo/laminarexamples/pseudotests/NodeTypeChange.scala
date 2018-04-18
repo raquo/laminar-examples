@@ -1,14 +1,13 @@
 package com.raquo.laminarexamples.pseudotests
 
-import com.raquo.laminar.bundle._
-import com.raquo.laminar.nodes.ReactiveElement
-import com.raquo.laminarexamples.components.Toggle
-import com.raquo.xstream.XStream
+import com.raquo.laminar.api.L._
+import com.raquo.airstream.core.LazyObservable
+import com.raquo.laminarexamples.components.Toggle2
 import org.scalajs.dom
 
 object NodeTypeChange {
 
-  def boldOrItalic($useB: XStream[Boolean], $bigFont: XStream[Boolean]): XStream[ReactiveElement[dom.Element]] = {
+  def boldOrItalic($useB: LazyObservable[Boolean], $bigFont: LazyObservable[Boolean]): LazyObservable[Element] = {
     val $fontSize = fontSizeStream($bigFont) // @TODO use remember()?
     $useB.map { useB =>
       dom.console.warn("useB: " + useB)
@@ -26,7 +25,7 @@ object NodeTypeChange {
     }
   }
 
-  def fontSizeStream($big: XStream[Boolean]): XStream[String] = {
+  def fontSizeStream($big: LazyObservable[Boolean]): LazyObservable[String] = {
     $big.map(ok => if (ok) {
       "45px"
     } else {
@@ -34,17 +33,17 @@ object NodeTypeChange {
     })
   }
 
-  def apply(): ReactiveElement[dom.Element] = {
+  def apply(): Div = {
 
-    val toggle = Toggle("Bold")
-    val toggle2 = Toggle("Big")
+    val toggle = Toggle2("Bold")
+    val toggle2 = Toggle2("Big")
     //    val counter = Counter()
     div(
       "APP",
       div(
         toggle.node,
         toggle2.node,
-        child <-- boldOrItalic($useB = toggle.$checked, $bigFont = toggle2.$checked.remember())
+        child <-- boldOrItalic($useB = toggle.$checkedInput, $bigFont = toggle2.$checkedInput.toSignal(false))
         //        div(
         //          color <-- myColor(toggle.$checked),
         //          b("COLOR")

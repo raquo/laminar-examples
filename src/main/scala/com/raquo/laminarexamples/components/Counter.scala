@@ -1,14 +1,14 @@
 package com.raquo.laminarexamples.components
 
-import com.raquo.laminar.bundle._
-import com.raquo.laminar.emitter.EventBus
-import com.raquo.laminar.nodes.ReactiveNode
-import com.raquo.xstream.{MemoryStream, XStream}
+import com.raquo.laminar.api.L._
+import com.raquo.airstream.eventbus.EventBus
+import com.raquo.airstream.eventstream.EventStream
+import com.raquo.airstream.signal.Signal
 import org.scalajs.dom
 
 class Counter private (
-  val $count: MemoryStream[Int],
-  val node: ReactiveNode
+  val $count: Signal[Int],
+  val node: Node
 )
 
 object Counter {
@@ -16,10 +16,10 @@ object Counter {
     val incClickBus = new EventBus[dom.MouseEvent]
     val decClickBus = new EventBus[dom.MouseEvent]
 
-    val $count = XStream
-      .merge(incClickBus.$.mapTo(1), decClickBus.$.mapTo(-1))
-      .fold((a: Int, b: Int) => a + b, seed = 0)
-      .debugWithLabel("$count")
+    val $count = EventStream
+      .merge(incClickBus.events.mapTo(1), decClickBus.events.mapTo(-1))
+      .fold(0)(_ + _)
+      // .debugWithLabel("$count")
 
     val node = div(
       className := "Counter",

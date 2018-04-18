@@ -1,24 +1,24 @@
 package com.raquo.laminarexamples.todomvc.components
 
-import com.raquo.laminar.bundle._
-import com.raquo.laminar.nodes.ReactiveElement
-import com.raquo.xstream.XStream
-import org.scalajs.dom
+import com.raquo.laminar.api.L._
+import com.raquo.airstream.eventstream.EventStream
+import com.raquo.airstream.signal.Signal
+
 
 import scala.util.Random
 
 class Toggle private(
-  val node: ReactiveElement[dom.html.Span],
-  val checkbox: ReactiveElement[dom.html.Input],
-  val label: ReactiveElement[dom.html.Label]
+  val node: Span,
+  val checkbox: Input,
+  val label: HtmlElement
 )
 
 object Toggle {
 
   /** @param $checkedInput  Stream of user's input, containing desired checked state */
   class BoundToggle private[Toggle](
-    val node: ReactiveElement[dom.html.Span],
-    val $checkedInput: XStream[Boolean]
+    val node: Span,
+    val $checkedInput: EventStream[Boolean]
   )
 
   def apply(): Toggle = {
@@ -42,8 +42,8 @@ object Toggle {
   }
 
   def apply(
-    $checked: XStream[Boolean],
-    $caption: XStream[String]
+    $checked: Signal[Boolean],
+    $caption: Signal[String]
   ): BoundToggle = {
     val toggle = Toggle()
     toggle.checkbox <-- checked <-- $checked
@@ -51,7 +51,7 @@ object Toggle {
     // We set preventDefault=true so that the checkbox only updates when a new value is received from $checked
     // Note that we need to use onClick rather than unChange because onChange fires AFTER the checkbox has been checked.
     // onClick event for checkboxes is more or less equivalent to onInput event for text inputs. #frontendLife
-    val $checkedInput = toggle.checkbox.$event(onClick, preventDefault = true).map(_ => !toggle.checkbox.ref.checked).debugWithLabel("$checkedInput")
+    val $checkedInput = toggle.checkbox.events(onClick, preventDefault = true).map(_ => toggle.checkbox.ref.checked) //.debugWithLabel("$checkedInput")
     new BoundToggle(toggle.node, $checkedInput)
   }
 }

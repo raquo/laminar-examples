@@ -1,17 +1,13 @@
 package com.raquo.laminarexamples.todomvc.components
 
-import com.raquo.dombuilder.generic.modifiers.ModifierSeq
-import com.raquo.domtypes.generic.Modifier
-import com.raquo.laminar.bundle._
-import com.raquo.laminar.nodes.ReactiveElement
-import org.scalajs.dom
+import com.raquo.laminar.api.L._
 
 object TextInput {
 
-  def apply(modifiers: Modifier[ReactiveElement[dom.html.Input]]*): ReactiveElement[dom.html.Input] = {
+  def apply(modifiers: Mod[Input]*): Input = {
     input(
       typ := "text",
-      new ModifierSeq(modifiers) // @TODO we shouldn't need to import dombuilder to use this, and we should have a value class for this
+      modifiers
     )
   }
 }

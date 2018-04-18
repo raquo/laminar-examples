@@ -1,18 +1,16 @@
 package com.raquo.laminarexamples.todomvc.views
 
-import com.raquo.laminar.bundle._
-import com.raquo.laminar.emitter.EventBus.WriteBus
-import com.raquo.laminar.nodes.ReactiveElement
+import com.raquo.airstream.eventbus.WriteBus
+import com.raquo.airstream.eventstream.EventStream
+import com.raquo.laminar.api.L._
 import com.raquo.laminarexamples.todomvc.backend.RestBackend.{CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, UpdateRequest}
 import com.raquo.laminarexamples.todomvc.backend.TaskBackend
 import com.raquo.laminarexamples.todomvc.components.TextInput
 import com.raquo.laminarexamples.todomvc.models.TaskModel
-import com.raquo.xstream.XStream
-import org.scalajs.dom
 import org.scalajs.dom.ext.KeyCode
 
 class TaskListView private(
-  val node: ReactiveElement[dom.html.Div]
+  val node: Div
 )
 
 object TaskListView {
@@ -25,7 +23,7 @@ object TaskListView {
 
     val addTaskButton = button("Add task")
 
-    val node: ReactiveElement[dom.html.Div] = div(
+    val node: Div = div(
       h1("TaskList"),
       newTaskInput,
       addTaskButton,
@@ -34,16 +32,17 @@ object TaskListView {
 
     // Setup Data flow
 
-    val $enterPress = newTaskInput.$event(onKeyUp).filter(_.keyCode == KeyCode.Enter)
-    val $addTaskClick = addTaskButton.$event(onClick)
-    val $addTaskRequest = XStream.merge($enterPress, $addTaskClick)
+    val $enterPress = newTaskInput.events(onKeyUp).filter(_.keyCode == KeyCode.Enter)
+    val $addTaskClick = addTaskButton.events(onClick)
+    val $addTaskRequest = EventStream.merge($enterPress, $addTaskClick)
       .map(_ => newTaskInput.ref.value)
       .filter(taskName => taskName != "")
       .map(taskName => CreateRequest(TaskModel(text = taskName)))
 
-    val updateBus = taskBackend.requestBus.map[TaskModel](UpdateRequest(_))
-    val deleteBus = taskBackend.requestBus.map[TaskModel](DeleteRequest(_))
-    taskBackend.requestBus.addSource($addTaskRequest) // @TODO this needs to be removed when destroying/unmounting this component? or maybe implemented addSource differently?
+    val updateBus = taskBackend.requestBus.writer.mapWriter[TaskModel](UpdateRequest(_))(owner = node)
+    val deleteBus = taskBackend.requestBus.writer.mapWriter[TaskModel](DeleteRequest(_))(owner = node)
+
+    node.subscribeBus($addTaskRequest, taskBackend.requestBus.writer)
 
     val $taskViewsDiff = taskViewsStream(taskBackend, updateBus, deleteBus)
 
@@ -62,23 +61,25 @@ object TaskListView {
     taskBackend: TaskBackend,
     updateBus: WriteBus[TaskModel],
     deleteBus: WriteBus[TaskModel]
-  ): XStream[(Vector[TaskView], Vector[TaskView])] = {
+  ): EventStream[(Vector[TaskView], Vector[TaskView])] = {
 
     // @TODO Note: this can also be implemented with ChildrenCommandReceiver, even a bit easier.
     // @TODO Note: we could also simplify implementation if we simply stored prevTaskViews in a variable
-    XStream
+    EventStream
       .merge(
         taskBackend.$createResponse,
         taskBackend.$deleteResponse
       )
       .fold(
-        accumulate = (taskViewsDiff: (Vector[TaskView], Vector[TaskView]), response) => {
+        initial = (Vector[TaskView](), Vector[TaskView]())
+      )(
+        (taskViewsDiff, response) => {
           val prevTaskViews = taskViewsDiff._2
           val nextTaskViews = response match {
             case CreateResponse(_, newTask) =>
               val newTaskView = TaskView(
                 taskId = newTask.id,
-                $task = taskBackend.$updateResponse.filter(_.model.id == newTask.id).map(_.model).startWith(newTask),
+                $task = taskBackend.$updateResponse.filter(_.model.id == newTask.id).map(_.model).toSignal(newTask),
                 updateBus = updateBus,
                 deleteBus = deleteBus
               )
@@ -87,8 +88,8 @@ object TaskListView {
               prevTaskViews.filterNot(_.taskId == deletedTask.id)
           }
           (prevTaskViews, nextTaskViews)
-        },
-        seed = (Vector(), Vector())
+        }
       )
+      .changes
   }
 }

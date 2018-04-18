@@ -1,7 +1,7 @@
 package com.raquo.laminarexamples
 
-import com.raquo.laminar.emitter.EventBus
-import com.raquo.laminar.render
+import com.raquo.airstream.eventbus.EventBus
+import com.raquo.laminar.api.L._
 import com.raquo.laminarexamples.todomvc.backend.RestBackend.Request
 import com.raquo.laminarexamples.todomvc.backend.TaskBackend
 import com.raquo.laminarexamples.todomvc.models.TaskModel

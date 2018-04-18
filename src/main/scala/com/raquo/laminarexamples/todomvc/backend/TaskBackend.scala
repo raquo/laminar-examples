@@ -1,22 +1,24 @@
 package com.raquo.laminarexamples.todomvc.backend
 
-import com.raquo.laminar.emitter.EventBus
+import com.raquo.airstream.core.Observer
+import com.raquo.airstream.eventbus.EventBus
+import com.raquo.airstream.eventstream.EventStream
+import com.raquo.airstream.ownership.Owner
 import com.raquo.laminarexamples.todomvc.backend.RestBackend.{CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, ListRequest, ListResponse, ReadRequest, ReadResponse, Request, Response, UpdateRequest, UpdateResponse}
 import com.raquo.laminarexamples.todomvc.models.TaskModel
-import com.raquo.xstream.{Listener, XStream}
 import org.scalajs.dom
 
-class TaskBackend(val requestBus: EventBus[Request[TaskModel]]) extends RestBackend[TaskModel] {
+class TaskBackend(val requestBus: EventBus[Request[TaskModel]]) extends RestBackend[TaskModel] with Owner {
 
   private var items: Map[Int, TaskModel] = Map()
 
-  override val $request: XStream[Request[TaskModel]] = requestBus.$
+  override val $request: EventStream[Request[TaskModel]] = requestBus.events
 
-  override val $response: XStream[RestBackend.Response[TaskModel]] = $request.map(processRequest)
+  override val $response: EventStream[RestBackend.Response[TaskModel]] = $request.map(processRequest)
 
-  // THe logging listener is just to ensure that requests will be processed even if nothing else
+  // The logging observer is just to ensure that requests will be processed even if nothing else
   // is listening, because we expect some of those requests to have desired side effects on the backend.
-  $response.addListener(Listener(onNext = logRequest))
+  $response.addObserver(Observer(onNext = logRequest))(owner = this)
 
   def processRequest(request: Request[TaskModel]): Response[TaskModel] = {
     request match {

@@ -1,14 +1,12 @@
 package com.raquo.laminarexamples.pseudotests
 
-import com.raquo.laminar.bundle._
-import com.raquo.laminar.nodes.ReactiveElement
-import com.raquo.laminarexamples.components.Toggle
-import com.raquo.xstream.XStream
-import org.scalajs.dom
+import com.raquo.laminar.api.L._
+import com.raquo.airstream.eventstream.EventStream
+import com.raquo.laminarexamples.components.Toggle2
 
 object NestedStyleProp {
 
-  def render($color: XStream[String]): ReactiveElement[dom.Element] = {
+  def render($color: EventStream[String]): Div = {
     div(
       color <-- $color,
       span("HELLO"),
@@ -16,17 +14,17 @@ object NestedStyleProp {
     )
   }
 
-  def apply(): ReactiveElement[dom.Element] = {
+  def apply(): Div = {
 
-    val toggle = Toggle("Big")
-    val toggle2 = Toggle("Red")
+    val toggle = Toggle2("Big")
+    val toggle2 = Toggle2("Red")
 
     val $fontSize = toggle
-      .$checked
+      .$checkedInput
 //      .startWith(true)
       .map(checked => if (checked) "45px" else "30px")
     val $fontColor = toggle2
-      .$checked
+      .$checkedInput
 //      .startWith(true)
       .map(checked => if (checked) "red" else "lime")
 

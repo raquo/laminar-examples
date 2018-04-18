@@ -1,18 +1,17 @@
 package com.raquo.laminarexamples.pseudotests
 
-import com.raquo.laminar.bundle._
-import com.raquo.laminar.nodes.ReactiveNode
-import com.raquo.laminarexamples.components.Toggle
+import com.raquo.laminar.api.L._
+import com.raquo.laminarexamples.components.Toggle2
 
 object MultiStyleProp {
 
-  def apply(): ReactiveNode = {
+  def apply(): Div = {
 
-    val toggle = Toggle("Big")
-    val toggle2 = Toggle("Red")
+    val toggle = Toggle2("Big")
+    val toggle2 = Toggle2("Red")
 
-    val $fontSize = toggle.$checked.startWith(true).map(checked => if (checked) "45px" else "30px")
-    val $fontColor = toggle2.$checked.startWith(true).map(checked => if (checked) "red" else "lime")
+    val $fontSize = toggle.$checkedInput.toSignal(true).map(checked => if (checked) "45px" else "30px")
+    val $fontColor = toggle2.$checkedInput.toSignal(true).map(checked => if (checked) "red" else "lime")
 
     div(
       className := "yolo",

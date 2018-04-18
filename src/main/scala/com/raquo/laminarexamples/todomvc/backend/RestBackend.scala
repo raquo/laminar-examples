@@ -1,32 +1,32 @@
 package com.raquo.laminarexamples.todomvc.backend
 
-import com.raquo.xstream.XStream
+import com.raquo.airstream.eventstream.EventStream
 
 trait RestBackend[Model] {
 
   import RestBackend._
 
-  val $request: XStream[Request[Model]]
+  val $request: EventStream[Request[Model]]
 
-  val $response: XStream[Response[Model]]
+  val $response: EventStream[Response[Model]]
 
-  lazy val $listResponse: XStream[ListResponse[Model]] = $response.collect {
+  lazy val $listResponse: EventStream[ListResponse[Model]] = $response.collect {
     case response: ListResponse[Model @unchecked] => response
   }
 
-  lazy val $readResponse: XStream[ReadResponse[Model]] = $response.collect {
+  lazy val $readResponse: EventStream[ReadResponse[Model]] = $response.collect {
     case response: ReadResponse[Model @unchecked] => response
   }
 
-  lazy val $createResponse: XStream[CreateResponse[Model]] = $response.collect {
+  lazy val $createResponse: EventStream[CreateResponse[Model]] = $response.collect {
     case response: CreateResponse[Model @unchecked] => response
   }
 
-  lazy val $updateResponse: XStream[UpdateResponse[Model]] = $response.collect {
+  lazy val $updateResponse: EventStream[UpdateResponse[Model]] = $response.collect {
     case response: UpdateResponse[Model @unchecked] => response
   }
 
-  lazy val $deleteResponse: XStream[DeleteResponse[Model]] = $response.collect {
+  lazy val $deleteResponse: EventStream[DeleteResponse[Model]] = $response.collect {
     case response: DeleteResponse[Model @unchecked] => response
   }
 }

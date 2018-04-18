@@ -1,25 +1,26 @@
 package com.raquo.laminarexamples.todomvc.views
 
-import com.raquo.laminar.bundle._
-import com.raquo.laminar.emitter.EventBus.WriteBus
-import com.raquo.laminar.nodes.ReactiveElement
-import com.raquo.laminarexamples.todomvc.components.Toggle
+import com.raquo.airstream.eventbus.{EventBus, WriteBus}
+import com.raquo.airstream.eventstream.EventStream
+import com.raquo.airstream.signal.{Signal, Val}
+import com.raquo.airstream.state.Var
+import com.raquo.laminar.api.L._
+import com.raquo.laminar.lifecycle.NodeDidMount
+import com.raquo.laminarexamples.todomvc.components.{TextInput, Toggle}
 import com.raquo.laminarexamples.todomvc.models.TaskModel
-import com.raquo.xstream.{MemoryStream, XStream}
 import org.scalajs.dom
-
-import scala.util.Random
+import org.scalajs.dom.ext.KeyCode
 
 class TaskView(
   val taskId: Int,
-  val node: ReactiveElement[dom.html.Div]
+  val node: Div
 )
 
 object TaskView {
 
   def apply(
     taskId: Int,
-    $task: MemoryStream[TaskModel],
+    $task: Signal[TaskModel],
     updateBus: WriteBus[TaskModel],
     deleteBus: WriteBus[TaskModel]
   ): TaskView = {
@@ -27,47 +28,67 @@ object TaskView {
     // Render
 
     val toggle = Toggle(
-      $checked = $task.map(_.isCompleted).debugWithLabel("$checked"),
-      $caption = $task.map(_.text)
+      $checked = $task.map(_.isCompleted), //.debugWithLabel("$checked"),
+      $caption = Val("") // $task.map(_.text)
     )
 
-    val plusButton = button("+")
+    val labelClickBus = new EventBus[dom.MouseEvent]
+    val textInputBus = new EventBus[String]
+
+    val $isEditing = EventStream.merge(
+      labelClickBus.events.mapTo(true),
+      $task.changes.mapTo(false) // possible alternative wording: Val(false).sampledBy($task.changes)
+    ).toSignal(initial = false)
+
+    val $textNode = $isEditing.combineWith($task).map2 { (isEditing, task) =>
+      if (isEditing) {
+        val input = TextInput(
+          value := task.text,
+          inContext(thisNode => onKeyUp.collect { // this is clunky
+            case ev if ev.keyCode == KeyCode.Enter => thisNode.ref.value
+          } --> textInputBus)
+        )
+        input.mountEvents.filter(_ == NodeDidMount).foreach(_ => input.ref.focus())(input)
+        input
+      } else {
+        span(
+          child.text <-- $task.map(_.text),
+          onClick --> labelClickBus
+        )
+      }
+    }
 
     val deleteButton = button("x")
 
     val node = div(
       toggle.node,
-      plusButton,
+      child <-- $textNode,
       deleteButton
     )
 
     // Bind
 
-    val $isCompletedInput = toggle.$checkedInput.debugWithLabel("$isCompleteInput")
-    val $textInput = plusButton.$event(onClick).map(_ => "NEW VALUE... " + Random.nextString(2))
+    val $isCompletedInput = toggle.$checkedInput //.debugWithLabel("$isCompleteInput")
 
-    val $updateTask = XStream
-      .combine($isCompletedInput.startWithNone(), $textInput.startWithNone())
-      .filter2((maybeNewIsComplete, maybeNewText) => maybeNewIsComplete.isDefined || maybeNewText.isDefined)
-      .sampleCombine($task)
-      .map3(updatedTask)
+    val $updatedTask = Var($task.toState(owner = node).now())(owner = node)
+    val $updatedWithIsCompleted = $isCompletedInput.map(newIsCompleted => $updatedTask.now().copy(isCompleted = newIsCompleted))
+    val $updatedWithText = textInputBus.events.map(newText => $updatedTask.now().copy(text = newText))
 
-    val $deleteTask = deleteButton.$event(onClick)
-      .sampleCombine($task)
-      .map2((_, task) => task)
+    $updatedTask.writer.addSource(
+      EventStream.merge(
+        $updatedWithIsCompleted,
+        $updatedWithText,
+        $task.changes
+      )
+    )(owner = node)
 
-    // Output
+    val $deleteTask = deleteButton
+      .events(onClick)
+      .sample($task)
 
-    updateBus.addSource($updateTask)
-    deleteBus.addSource($deleteTask)
+    node.subscribeBus($updatedTask.changes, updateBus)
+    node.subscribeBus($deleteTask, deleteBus)
 
     new TaskView(taskId, node)
-  }
-
-  def updatedTask(maybeNewIsComplete: Option[Boolean], maybeNewText: Option[String], task: TaskModel) = {
-    task.copy(
-      isCompleted = maybeNewIsComplete.getOrElse(task.isCompleted),
-      text = maybeNewText.getOrElse(task.text)
-    )
   }
 }

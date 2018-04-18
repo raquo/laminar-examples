@@ -1,19 +1,18 @@
 package com.raquo.laminarexamples.pseudotests
 
-import com.raquo.laminar.bundle._
-import com.raquo.laminar.nodes.ReactiveElement
-import com.raquo.laminarexamples.components.Toggle
+import com.raquo.laminar.api.L._
+import com.raquo.laminarexamples.components.Toggle2
 import org.scalajs.dom
 
 object MultiSetters {
 
-  def apply(): ReactiveElement[dom.Element] = {
+  def apply(): Div = {
 
-    val toggle = Toggle("Big")
-    val toggle2 = Toggle("/about")
+    val toggle = Toggle2("Big")
+    val toggle2 = Toggle2("/about")
 
-    val $fontSize = toggle.$checked.map(checked => if (checked) "45px" else "30px")
-    val $href = toggle2.$checked.map(checked => if (checked) "http://yolo.com/ABOUT" else "http://yolo.com/")
+    val $fontSize = toggle.$checkedInput.map(checked => if (checked) "45px" else "30px")
+    val $href = toggle2.$checkedInput.map(checked => if (checked) "http://yolo.com/ABOUT" else "http://yolo.com/")
 
     div(
       className := "yolo",

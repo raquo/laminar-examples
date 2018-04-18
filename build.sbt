@@ -2,13 +2,23 @@ enablePlugins(ScalaJSPlugin)
 
 enablePlugins(ScalaJSBundlerPlugin)
 
+name := "Laminar Examples"
+
+version := "0.1-SNAPSHOT"
+
+normalizedName := "laminarexamples"
+
+organization := "com.raquo"
+
+scalaVersion := "2.12.5"
+
+crossScalaVersions := Seq("2.11.12", "2.12.5")
+
 libraryDependencies ++= Seq(
-  "org.scala-js" %%% "scalajs-dom" % "0.9.3",
-  "com.raquo.xstream" %%% "xstream" % "0.2.2-SNAPSHOT",
-  "com.raquo" %%% "laminar" % "0.1.1-SNAPSHOT",
-  "com.raquo" %%% "dombuilder" % "0.3", // @TODO we should not need to import this
-  "org.scalatest" %%% "scalatest" % "3.0.3" % Test,
-  "com.raquo" %%% "domtestutils" % "0.3" % Test
+  "com.raquo" %%% "laminar" % "0.3-SNAPSHOT",
+  "org.scala-js" %%% "scalajs-dom" % "0.9.5",
+  "com.raquo" %%% "domtestutils" % "0.7" % Test,
+  "org.scalatest" %%% "scalatest" % "3.0.5" % Test
 )
 
 useYarn := true
