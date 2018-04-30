@@ -1,7 +1,5 @@
 package com.raquo.laminarexamples.todomvc.views
 
-import com.raquo.airstream.eventbus.WriteBus
-import com.raquo.airstream.eventstream.EventStream
 import com.raquo.laminar.api.L._
 import com.raquo.laminarexamples.todomvc.backend.RestBackend.{CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, UpdateRequest}
 import com.raquo.laminarexamples.todomvc.backend.TaskBackend

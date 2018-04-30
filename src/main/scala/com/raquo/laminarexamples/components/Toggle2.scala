@@ -1,7 +1,5 @@
 package com.raquo.laminarexamples.components
 
-import com.raquo.airstream.eventbus.EventBus
-import com.raquo.airstream.eventstream.EventStream
 import com.raquo.laminar.api.L._
 
 import scala.util.Random

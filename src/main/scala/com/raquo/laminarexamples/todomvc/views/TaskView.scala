@@ -1,9 +1,5 @@
 package com.raquo.laminarexamples.todomvc.views
 
-import com.raquo.airstream.eventbus.{EventBus, WriteBus}
-import com.raquo.airstream.eventstream.EventStream
-import com.raquo.airstream.signal.{Signal, Val}
-import com.raquo.airstream.state.Var
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.lifecycle.NodeDidMount
 import com.raquo.laminarexamples.todomvc.components.{TextInput, Toggle}
@@ -70,11 +66,16 @@ object TaskView {
 
     val $isCompletedInput = toggle.$checkedInput //.debugWithLabel("$isCompleteInput")
 
-    val $updatedTask = Var($task.toState(owner = node).now())(owner = node)
-    val $updatedWithIsCompleted = $isCompletedInput.map(newIsCompleted => $updatedTask.now().copy(isCompleted = newIsCompleted))
-    val $updatedWithText = textInputBus.events.map(newText => $updatedTask.now().copy(text = newText))
+    // @TODO this is uglier than it needs to be
+    val updatedTaskVar = StateVar(initial = $task.toState(owner = node).now())(owner = node)
+    val $updatedWithIsCompleted = $isCompletedInput
+      .withCurrentValueOf(updatedTaskVar.state)
+      .map2((newIsCompleted, updatedTask) => updatedTask.copy(isCompleted = newIsCompleted))
+    val $updatedWithText = textInputBus.events
+      .withCurrentValueOf(updatedTaskVar.state)
+      .map2((newText, updatedTask) => updatedTask.copy(text = newText))
 
-    $updatedTask.writer.addSource(
+    updatedTaskVar.writer.addSource(
       EventStream.merge(
         $updatedWithIsCompleted,
         $updatedWithText,
@@ -86,7 +87,7 @@ object TaskView {
       .events(onClick)
       .sample($task)
 
-    node.subscribeBus($updatedTask.changes, updateBus)
+    node.subscribeBus(updatedTaskVar.state.changes, updateBus)
     node.subscribeBus($deleteTask, deleteBus)
 
     new TaskView(taskId, node)

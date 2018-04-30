@@ -1,7 +1,7 @@
 package com.raquo.laminarexamples
 
-import com.raquo.airstream.eventbus.EventBus
 import com.raquo.laminar.api.L._
+import com.raquo.laminarexamples.intro.DuckMaster
 import com.raquo.laminarexamples.todomvc.backend.RestBackend.Request
 import com.raquo.laminarexamples.todomvc.backend.TaskBackend
 import com.raquo.laminarexamples.todomvc.models.TaskModel
@@ -18,12 +18,19 @@ object App extends js.JSApp {
     document.addEventListener("DOMContentLoaded", (e: Event) => {
       dom.console.log("=== DOMContentLoaded ===")
 
-      val container = document.getElementById("app-container")
+      val container = document.getElementById("app-container") // This div, its id and contents are defined in index-fastopt.html/index-fullopt.html files
       container.textContent = ""
 
-      val requestBus = new EventBus[Request[TaskModel]]
-      val backend = new TaskBackend(requestBus)
-
-      render(container, TaskListView(backend).node)
+      render(container, todoApp())
+//      render(container, DuckMaster.app())
     })
-  }}
+  }
+
+
+  def todoApp(): HtmlElement = {
+    val requestBus = new EventBus[Request[TaskModel]]
+    val backend = new TaskBackend(requestBus)
+
+    TaskListView(backend).node
+  }
+}

@@ -1,7 +1,6 @@
 package com.raquo.laminarexamples.pseudotests
 
 import com.raquo.laminar.api.L._
-import com.raquo.airstream.core.LazyObservable
 import com.raquo.laminarexamples.components.Toggle2
 import org.scalajs.dom
 

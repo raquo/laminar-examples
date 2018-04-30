@@ -1,8 +1,6 @@
 package com.raquo.laminarexamples.todomvc.backend
 
-import com.raquo.airstream.core.Observer
-import com.raquo.airstream.eventbus.EventBus
-import com.raquo.airstream.eventstream.EventStream
+import com.raquo.laminar.api.L._
 import com.raquo.airstream.ownership.Owner
 import com.raquo.laminarexamples.todomvc.backend.RestBackend.{CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, ListRequest, ListResponse, ReadRequest, ReadResponse, Request, Response, UpdateRequest, UpdateResponse}
 import com.raquo.laminarexamples.todomvc.models.TaskModel

@@ -1,6 +1,6 @@
 package com.raquo.laminarexamples.todomvc.backend
 
-import com.raquo.airstream.eventstream.EventStream
+import com.raquo.laminar.api.L._
 
 trait RestBackend[Model] {
 

@@ -1,8 +1,6 @@
 package com.raquo.laminarexamples.todomvc.components
 
 import com.raquo.laminar.api.L._
-import com.raquo.airstream.eventstream.EventStream
-import com.raquo.airstream.signal.Signal
 
 
 import scala.util.Random
