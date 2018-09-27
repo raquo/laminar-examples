@@ -1,6 +1,7 @@
 package com.raquo.laminarexamples
 
 import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{svg => s}
 import com.raquo.laminarexamples.intro.DuckMaster
 import com.raquo.laminarexamples.todomvc.backend.RestBackend.Request
 import com.raquo.laminarexamples.todomvc.backend.TaskBackend
@@ -22,6 +23,7 @@ object App extends js.JSApp {
       container.textContent = ""
 
       render(container, todoApp())
+//      render(container, svgTest())
 //      render(container, DuckMaster.app())
     })
   }
@@ -32,5 +34,21 @@ object App extends js.JSApp {
     val backend = new TaskBackend(requestBus)
 
     TaskListView(backend).node
+  }
+
+  def svgTest(): HtmlElement = {
+    div(
+      "SVG!!!",
+      s.svg(
+        s.height := "200",
+        s.width := "400",
+        s.circle(
+          s.cx := "200",
+          s.cy := "15",
+          s.r := "30",
+          s.fill := "red"
+        )
+      )
+    )
   }
 }

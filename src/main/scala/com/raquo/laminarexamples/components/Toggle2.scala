@@ -22,7 +22,7 @@ object Toggle2 {
       id := "toggle" + rand,
       className := "red",
       `type` := "checkbox",
-      inContext(thisNode => onClick.preventDefault.map(_ => thisNode.ref.checked) --> checkedBus)
+      inContext(thisNode => onClick.preventDefault.mapTo(thisNode.ref.checked) --> checkedBus)
     )
 
     val $captionNode = checkedBus.events.map(checked => span(if (checked) "ON" else "off"))

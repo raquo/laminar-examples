@@ -33,12 +33,12 @@ object TaskListView {
     val $enterPress = newTaskInput.events(onKeyUp).filter(_.keyCode == KeyCode.Enter)
     val $addTaskClick = addTaskButton.events(onClick)
     val $addTaskRequest = EventStream.merge($enterPress, $addTaskClick)
-      .map(_ => newTaskInput.ref.value)
+      .mapTo(newTaskInput.ref.value)
       .filter(taskName => taskName != "")
       .map(taskName => CreateRequest(TaskModel(text = taskName)))
 
-    val updateBus = taskBackend.requestBus.writer.mapWriter[TaskModel](UpdateRequest(_))(owner = node)
-    val deleteBus = taskBackend.requestBus.writer.mapWriter[TaskModel](DeleteRequest(_))(owner = node)
+    val updateBus = taskBackend.requestBus.writer.contramapWriter[TaskModel](UpdateRequest(_))(owner = node)
+    val deleteBus = taskBackend.requestBus.writer.contramapWriter[TaskModel](DeleteRequest(_))(owner = node)
 
     node.subscribeBus($addTaskRequest, taskBackend.requestBus.writer)
 
