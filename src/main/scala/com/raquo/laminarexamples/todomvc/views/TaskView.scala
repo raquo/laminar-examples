@@ -67,27 +67,25 @@ object TaskView {
     val $isCompletedInput = toggle.$checkedInput //.debugWithLabel("$isCompleteInput")
 
     // @TODO this is uglier than it needs to be
-    val updatedTaskVar = StateVar(initial = $task.toState(owner = node).now())(owner = node)
-    val $updatedWithIsCompleted = $isCompletedInput
-      .withCurrentValueOf(updatedTaskVar.state)
-      .map2((newIsCompleted, updatedTask) => updatedTask.copy(isCompleted = newIsCompleted))
-    val $updatedWithText = textInputBus.events
-      .withCurrentValueOf(updatedTaskVar.state)
-      .map2((newText, updatedTask) => updatedTask.copy(text = newText))
+    val updatedTaskVar = Var(initial = $task.observe(owner = node).now())
 
-    updatedTaskVar.writer.addSource(
-      EventStream.merge(
-        $updatedWithIsCompleted,
-        $updatedWithText,
-        $task.changes
-      )
-    )(owner = node)
+    val $updatedWithIsCompleted = $isCompletedInput
+      .map(newIsCompleted => updatedTaskVar.now().copy(isCompleted = newIsCompleted))
+
+    val $updatedWithText = textInputBus.events
+      .map(newText => updatedTaskVar.now().copy(text = newText))
+
+    EventStream.merge(
+      $updatedWithIsCompleted,
+      $updatedWithText,
+      $task.changes
+    ).addObserver(updatedTaskVar.writer)(owner = node)
 
     val $deleteTask = deleteButton
       .events(onClick)
       .sample($task)
 
-    node.subscribeBus(updatedTaskVar.state.changes, updateBus)
+    node.subscribeBus(updatedTaskVar.signal.changes, updateBus)
     node.subscribeBus($deleteTask, deleteBus)
 
     new TaskView(taskId, node)

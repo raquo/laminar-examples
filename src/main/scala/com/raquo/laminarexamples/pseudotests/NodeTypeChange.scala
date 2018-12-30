@@ -6,7 +6,7 @@ import org.scalajs.dom
 
 object NodeTypeChange {
 
-  def boldOrItalic($useB: LazyObservable[Boolean], $bigFont: LazyObservable[Boolean]): LazyObservable[Element] = {
+  def boldOrItalic($useB: Observable[Boolean], $bigFont: Observable[Boolean]): Observable[Element] = {
     val $fontSize = fontSizeStream($bigFont) // @TODO use remember()?
     $useB.map { useB =>
       dom.console.warn("useB: " + useB)
@@ -24,7 +24,7 @@ object NodeTypeChange {
     }
   }
 
-  def fontSizeStream($big: LazyObservable[Boolean]): LazyObservable[String] = {
+  def fontSizeStream($big: Observable[Boolean]): Observable[String] = {
     $big.map(ok => if (ok) {
       "45px"
     } else {

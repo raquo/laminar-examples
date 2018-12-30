@@ -16,7 +16,7 @@ import scala.scalajs.js
 object App extends js.JSApp {
 
   def main(): Unit = {
-    document.addEventListener("DOMContentLoaded", (e: Event) => {
+    documentEvents.onDomContentLoaded.foreach { _ =>
       dom.console.log("=== DOMContentLoaded ===")
 
       val container = document.getElementById("app-container") // This div, its id and contents are defined in index-fastopt.html/index-fullopt.html files
@@ -25,7 +25,7 @@ object App extends js.JSApp {
       render(container, todoApp())
 //      render(container, svgTest())
 //      render(container, DuckMaster.app())
-    })
+    }(unsafeWindowOwner)
   }
 
 
