@@ -1,14 +1,20 @@
 package com.raquo.laminarexamples.todomvc.views
 
 import com.raquo.laminar.api.L._
-import com.raquo.laminarexamples.todomvc.backend.RestBackend.{CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, UpdateRequest}
+import com.raquo.laminarexamples.todomvc.backend.RestBackend.{
+  CreateRequest,
+  CreateResponse,
+  DeleteRequest,
+  DeleteResponse,
+  UpdateRequest
+}
 import com.raquo.laminarexamples.todomvc.backend.TaskBackend
 import com.raquo.laminarexamples.todomvc.components.TextInput
 import com.raquo.laminarexamples.todomvc.models.TaskModel
 import org.scalajs.dom.ext.KeyCode
 
-class TaskListView private(
-  val node: Div
+class TaskListView private (
+    val node: Div
 )
 
 object TaskListView {
@@ -30,15 +36,19 @@ object TaskListView {
 
     // Setup Data flow
 
-    val $enterPress = newTaskInput.events(onKeyUp).filter(_.keyCode == KeyCode.Enter)
+    val $enterPress =
+      newTaskInput.events(onKeyUp).filter(_.keyCode == KeyCode.Enter)
     val $addTaskClick = addTaskButton.events(onClick)
-    val $addTaskRequest = EventStream.merge($enterPress, $addTaskClick)
+    val $addTaskRequest = EventStream
+      .merge($enterPress, $addTaskClick)
       .mapTo(newTaskInput.ref.value)
       .filter(taskName => taskName != "")
       .map(taskName => CreateRequest(TaskModel(text = taskName)))
 
-    val updateBus = taskBackend.requestBus.writer.contramapWriter[TaskModel](UpdateRequest(_))(owner = node)
-    val deleteBus = taskBackend.requestBus.writer.contramapWriter[TaskModel](DeleteRequest(_))(owner = node)
+    val updateBus = taskBackend.requestBus.writer
+      .contramapWriter[TaskModel](UpdateRequest(_))(owner = node)
+    val deleteBus = taskBackend.requestBus.writer
+      .contramapWriter[TaskModel](DeleteRequest(_))(owner = node)
 
     node.subscribeBus($addTaskRequest, taskBackend.requestBus.writer)
 
@@ -56,9 +66,9 @@ object TaskListView {
   }
 
   private def taskViewsStream(
-    taskBackend: TaskBackend,
-    updateBus: WriteBus[TaskModel],
-    deleteBus: WriteBus[TaskModel]
+      taskBackend: TaskBackend,
+      updateBus: WriteBus[TaskModel],
+      deleteBus: WriteBus[TaskModel]
   ): EventStream[(Vector[TaskView], Vector[TaskView])] = {
 
     // @TODO Note: this can also be implemented with ChildrenCommandReceiver, even a bit easier.
@@ -77,13 +87,15 @@ object TaskListView {
             case CreateResponse(_, newTask) =>
               val newTaskView = TaskView(
                 taskId = newTask.id,
-                $task = taskBackend.$updateResponse.filter(_.model.id == newTask.id).map(_.model).toSignal(newTask),
+                $task = taskBackend.$updateResponse.filter(
+                  _.model.id == newTask.id).map(_.model).toSignal(newTask),
                 updateBus = updateBus,
                 deleteBus = deleteBus
               )
               prevTaskViews :+ newTaskView
             case DeleteResponse(_, deletedTask) =>
               prevTaskViews.filterNot(_.taskId == deletedTask.id)
+            case _ => prevTaskViews
           }
           (prevTaskViews, nextTaskViews)
         }

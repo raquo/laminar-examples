@@ -11,11 +11,9 @@ import org.scalajs.dom
 import org.scalajs.dom.document
 import org.scalajs.dom.raw.Event
 
-import scala.scalajs.js
+object App {
 
-object App extends js.JSApp {
-
-  def main(): Unit = {
+  def main(args: Array[String]): Unit = {
     documentEvents.onDomContentLoaded.foreach { _ =>
       dom.console.log("=== DOMContentLoaded ===")
 
@@ -27,7 +25,6 @@ object App extends js.JSApp {
 //      render(container, DuckMaster.app())
     }(unsafeWindowOwner)
   }
-
 
   def todoApp(): HtmlElement = {
     val requestBus = new EventBus[Request[TaskModel]]
