@@ -10,8 +10,10 @@ organization := "com.raquo"
 
 scalaVersion := "2.12.8"
 
-libraryDependencies +=   "com.raquo" %%% "laminar" % "0.6"
+libraryDependencies +=   "com.raquo" %%% "laminar" % "0.7"
 
 scalaJSUseMainModuleInitializer := true
 
-emitSourceMaps := false
+emitSourceMaps in fullOptJS := true
+
+emitSourceMaps in Compile := true

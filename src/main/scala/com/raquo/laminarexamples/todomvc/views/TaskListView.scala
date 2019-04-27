@@ -1,13 +1,7 @@
 package com.raquo.laminarexamples.todomvc.views
 
 import com.raquo.laminar.api.L._
-import com.raquo.laminarexamples.todomvc.backend.RestBackend.{
-  CreateRequest,
-  CreateResponse,
-  DeleteRequest,
-  DeleteResponse,
-  UpdateRequest
-}
+import com.raquo.laminarexamples.todomvc.backend.RestBackend._
 import com.raquo.laminarexamples.todomvc.backend.TaskBackend
 import com.raquo.laminarexamples.todomvc.components.TextInput
 import com.raquo.laminarexamples.todomvc.models.TaskModel
@@ -52,54 +46,32 @@ object TaskListView {
 
     node.subscribeBus($addTaskRequest, taskBackend.requestBus.writer)
 
-    val $taskViewsDiff = taskViewsStream(taskBackend, updateBus, deleteBus)
+    val tasksVar = Var[List[TaskModel]](Nil)
+
+    taskBackend.$response.foreach {
+        case CreateResponse(_, newTask) =>
+          tasksVar.update(_ :+ newTask)
+        case UpdateResponse(_, updatedTask) =>
+          tasksVar.update{ tasks =>
+            val ix = tasks.indexWhere(_.id == updatedTask.id)
+            if (ix >= 0) tasks.updated(ix, updatedTask)
+            else tasks
+          }
+        case DeleteResponse(_, deletedTask) =>
+          tasksVar.update(_.filterNot(_.id == deletedTask.id))
+        case _ => ()
+    }(owner = node)
 
     newTaskInput <-- focus <-- $addTaskRequest.mapTo(true) // @TODO also do this on validation failure
 
     newTaskInput <-- value <-- $addTaskRequest.mapTo("")
 
-    node <-- children <-- $taskViewsDiff.map(_._2.map(_.node))
+    node <-- children <-- tasksVar.signal.split(_.id) {
+      (taskId, _, $task) => TaskView(taskId, $task, updateBus, deleteBus).node
+    }
 
     // All done!
 
     new TaskListView(node)
-  }
-
-  private def taskViewsStream(
-      taskBackend: TaskBackend,
-      updateBus: WriteBus[TaskModel],
-      deleteBus: WriteBus[TaskModel]
-  ): EventStream[(Vector[TaskView], Vector[TaskView])] = {
-
-    // @TODO Note: this can also be implemented with ChildrenCommandReceiver, even a bit easier.
-    // @TODO Note: we could also simplify implementation if we simply stored prevTaskViews in a variable
-    EventStream
-      .merge(
-        taskBackend.$createResponse,
-        taskBackend.$deleteResponse
-      )
-      .fold(
-        initial = (Vector[TaskView](), Vector[TaskView]())
-      )(
-        (taskViewsDiff, response) => {
-          val prevTaskViews = taskViewsDiff._2
-          val nextTaskViews = response match {
-            case CreateResponse(_, newTask) =>
-              val newTaskView = TaskView(
-                taskId = newTask.id,
-                $task = taskBackend.$updateResponse.filter(
-                  _.model.id == newTask.id).map(_.model).toSignal(newTask),
-                updateBus = updateBus,
-                deleteBus = deleteBus
-              )
-              prevTaskViews :+ newTaskView
-            case DeleteResponse(_, deletedTask) =>
-              prevTaskViews.filterNot(_.taskId == deletedTask.id)
-            case _ => prevTaskViews
-          }
-          (prevTaskViews, nextTaskViews)
-        }
-      )
-      .changes
   }
 }

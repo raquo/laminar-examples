@@ -66,7 +66,7 @@ object TaskView {
 
     val $isCompletedInput = toggle.$checkedInput //.debugWithLabel("$isCompleteInput")
 
-    // @TODO this is uglier than it needs to be
+    // @TODO this is uglier than it needs to be. I don't recommend using this for inspiration.
     val updatedTaskVar = Var(initial = $task.observe(owner = node).now())
 
     val $updatedWithIsCompleted = $isCompletedInput
