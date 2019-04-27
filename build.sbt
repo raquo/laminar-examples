@@ -14,6 +14,4 @@ libraryDependencies +=   "com.raquo" %%% "laminar" % "0.7"
 
 scalaJSUseMainModuleInitializer := true
 
-emitSourceMaps in fullOptJS := true
-
-emitSourceMaps in Compile := true
+emitSourceMaps := false
