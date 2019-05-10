@@ -1,9 +1,9 @@
-package com.raquo.laminarexamples.todomvc.backend
+package oldstuff.todo.backend
 
 import com.raquo.laminar.api.L._
 import com.raquo.airstream.ownership.Owner
-import com.raquo.laminarexamples.todomvc.backend.RestBackend.{CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, ListRequest, ListResponse, ReadRequest, ReadResponse, Request, Response, UpdateRequest, UpdateResponse}
-import com.raquo.laminarexamples.todomvc.models.TaskModel
+import oldstuff.todo.backend.RestBackend.{CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, ListRequest, ListResponse, ReadRequest, ReadResponse, Request, Response, UpdateRequest, UpdateResponse}
+import oldstuff.todo.models.TaskModel
 import org.scalajs.dom
 
 class TaskBackend(val requestBus: EventBus[Request[TaskModel]]) extends RestBackend[TaskModel] with Owner {

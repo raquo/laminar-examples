@@ -1,10 +1,10 @@
-package com.raquo.laminarexamples.todomvc.views
+package oldstuff.todo.views
 
 import com.raquo.laminar.api.L._
-import com.raquo.laminarexamples.todomvc.backend.RestBackend._
-import com.raquo.laminarexamples.todomvc.backend.TaskBackend
-import com.raquo.laminarexamples.todomvc.components.TextInput
-import com.raquo.laminarexamples.todomvc.models.TaskModel
+import oldstuff.todo.backend.RestBackend._
+import oldstuff.todo.backend.TaskBackend
+import oldstuff.todo.components.TextInput
+import oldstuff.todo.models.TaskModel
 import org.scalajs.dom.ext.KeyCode
 
 class TaskListView private (

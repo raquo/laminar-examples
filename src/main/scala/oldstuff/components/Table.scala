@@ -1,4 +1,4 @@
-package com.raquo.laminarexamples.components
+package oldstuff.components
 
 import com.raquo.laminar.api.L._
 

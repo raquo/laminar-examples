@@ -1,4 +1,4 @@
-package com.raquo.laminarexamples.todomvc.backend
+package oldstuff.todo.backend
 
 import com.raquo.laminar.api.L._
 

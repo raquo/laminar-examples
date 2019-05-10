@@ -1,7 +1,7 @@
-package com.raquo.laminarexamples.pseudotests
+package oldstuff.pseudotests
 
 import com.raquo.laminar.api.L._
-import com.raquo.laminarexamples.components.Toggle2
+import oldstuff.components.Toggle2
 
 object MultiStyleProp {
 

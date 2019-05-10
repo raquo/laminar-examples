@@ -1,4 +1,4 @@
-package com.raquo.laminarexamples.todomvc.models
+package oldstuff.todo.models
 
 import scala.util.Random
 

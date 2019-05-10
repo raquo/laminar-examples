@@ -1,4 +1,4 @@
-package com.raquo.laminarexamples.todomvc.components
+package oldstuff.todo.components
 
 import com.raquo.laminar.api.L._
 

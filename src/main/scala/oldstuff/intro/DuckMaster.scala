@@ -1,7 +1,7 @@
-package com.raquo.laminarexamples.intro
+package oldstuff.intro
 
 import com.raquo.laminar.api.L._
-import com.raquo.laminarexamples.components.Counter
+import oldstuff.components.Counter
 
 object DuckMaster {
 
