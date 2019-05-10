@@ -2,7 +2,7 @@
 
 This repo contains a TodoMVC implementation and an assortment of random components using my [Laminar](https://github.com/raquo/laminar) reactive UI library for Scala.js.
 
-The **[TodoMVC](http://todomvc.com/)** example is decent Laminar code, except all its Scala code is deliberately put into one file for easier cross-reference. See `todomvc/TodoMvcApp.scala` for the implementation.
+The standard TodoMVC example is decent Laminar code, except all its Scala code is deliberately put into one file for easier cross-reference. See **[TodoMvcApp.scala](https://github.com/raquo/laminar-examples/blob/master/src/main/scala/todomvc/TodoMvcApp.scala)** for the implementation.
 
 The stuff in `oldstuff` is old. Duh. I should probably delete most of it.
 
