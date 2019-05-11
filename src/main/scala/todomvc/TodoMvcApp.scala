@@ -6,6 +6,8 @@ import org.scalajs.dom.ext.KeyCode
 // Everything we need is in this one file. TodoMvcApp.render() is called from App.scala
 object TodoMvcApp {
 
+  // This implementation is very loosely based on Outwatch TodoMVC, for comparison see
+  // https://github.com/clovellytech/outwatch-examples/tree/master/todomvc/src/main/scala/todomvc
 
   // Models
 
@@ -189,6 +191,7 @@ object TodoMvcApp {
   // Every little thing in Laminar can be abstracted away
   private def hideIfNoItems: Mod[HtmlElement] =
     display <-- itemsVar.signal.map(items => if (items.nonEmpty) "" else "none")
+
 
   // Helpers
 
