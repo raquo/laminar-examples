@@ -38,6 +38,9 @@ object TodoMvcApp {
 
   // State
 
+  // Var-s are reactive state variables suitable for both local state and redux-like global stores.
+  // Laminar uses my library Airstream as its reactive layer https://github.com/raquo/Airstream
+
   private val itemsVar = Var(List[TodoItem]())
 
   private val filterVar = Var[Filter](ShowAll)
