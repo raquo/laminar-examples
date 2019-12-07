@@ -3,6 +3,9 @@ package todomvc
 import com.raquo.laminar.api.L._
 import org.scalajs.dom.ext.KeyCode
 
+// Laminar is a simple, expressive, and safe UI library for Scala.js
+// https://github.com/raquo/Laminar
+
 // Everything we need is in this one file. TodoMvcApp.render() is called from App.scala
 object TodoMvcApp {
 

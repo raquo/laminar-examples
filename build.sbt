@@ -8,9 +8,11 @@ normalizedName := "laminarexamples"
 
 organization := "com.raquo"
 
-scalaVersion := "2.12.8"
+scalaVersion := "2.12.10"
 
-libraryDependencies +=   "com.raquo" %%% "laminar" % "0.7"
+crossScalaVersions := Seq("2.12.10", "2.13.1")
+
+libraryDependencies += "com.raquo" %%% "laminar" % "0.7.2"
 
 scalaJSUseMainModuleInitializer := true
 
