@@ -44,8 +44,8 @@ object Toggle {
     $caption: Signal[String]
   ): BoundToggle = {
     val toggle = Toggle()
-    toggle.checkbox <-- checked <-- $checked
-    toggle.label <-- child.text <-- $caption
+    toggle.checkbox.amend(checked <-- $checked)
+    toggle.label.amend(child.text <-- $caption)
     // We set preventDefault=true so that the checkbox only updates when a new value is received from $checked
     // Note that we need to use onClick rather than unChange because onChange fires AFTER the checkbox has been checked.
     // onClick event for checkboxes is more or less equivalent to onInput event for text inputs. #frontendLife

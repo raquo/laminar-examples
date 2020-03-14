@@ -8,12 +8,13 @@ normalizedName := "laminarexamples"
 
 organization := "com.raquo"
 
-scalaVersion := "2.12.10"
+scalaVersion := "2.13.1"
 
 crossScalaVersions := Seq("2.12.10", "2.13.1")
 
-libraryDependencies += "com.raquo" %%% "laminar" % "0.7.2"
+libraryDependencies += "com.raquo" %%% "laminar" % "0.8.0"
 
 scalaJSUseMainModuleInitializer := true
 
-emitSourceMaps := false
+scalaJSLinkerConfig in (Compile, fastOptJS) ~= { _.withSourceMap(false) }
+

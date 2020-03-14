@@ -1,7 +1,6 @@
 package oldstuff.todo.views
 
 import com.raquo.laminar.api.L._
-import com.raquo.laminar.lifecycle.NodeDidMount
 import oldstuff.todo.components.{TextInput, Toggle}
 import oldstuff.todo.models.TaskModel
 import org.scalajs.dom
@@ -16,9 +15,10 @@ object TaskView {
 
   def apply(
     taskId: Int,
+    initialTask: TaskModel,
     $task: Signal[TaskModel],
-    updateBus: WriteBus[TaskModel],
-    deleteBus: WriteBus[TaskModel]
+    updateObserver: Observer[TaskModel],
+    deleteObserver: Observer[TaskModel]
   ): TaskView = {
 
     // Render
@@ -38,14 +38,13 @@ object TaskView {
 
     val $textNode = $isEditing.combineWith($task).map2 { (isEditing, task) =>
       if (isEditing) {
-        val input = TextInput(
+        TextInput(
+          onMountFocus,
           value := task.text,
           inContext(thisNode => onKeyUp.collect { // this is clunky
             case ev if ev.keyCode == KeyCode.Enter => thisNode.ref.value
-          } --> textInputBus)
+          } --> textInputBus),
         )
-        input.mountEvents.filter(_ == NodeDidMount).foreach(_ => input.ref.focus())(input)
-        input
       } else {
         span(
           child.text <-- $task.map(_.text),
@@ -56,18 +55,11 @@ object TaskView {
 
     val deleteButton = button("x")
 
-    val node = div(
-      toggle.node,
-      child <-- $textNode,
-      deleteButton
-    )
-
     // Bind
 
     val $isCompletedInput = toggle.$checkedInput //.debugWithLabel("$isCompleteInput")
 
-    // @TODO this is uglier than it needs to be. I don't recommend using this for inspiration.
-    val updatedTaskVar = Var(initial = $task.observe(owner = node).now())
+    val updatedTaskVar = Var(initial = initialTask)
 
     val $updatedWithIsCompleted = $isCompletedInput
       .map(newIsCompleted => updatedTaskVar.now().copy(isCompleted = newIsCompleted))
@@ -75,18 +67,25 @@ object TaskView {
     val $updatedWithText = textInputBus.events
       .map(newText => updatedTaskVar.now().copy(text = newText))
 
-    EventStream.merge(
-      $updatedWithIsCompleted,
-      $updatedWithText,
-      $task.changes
-    ).addObserver(updatedTaskVar.writer)(owner = node)
-
     val $deleteTask = deleteButton
       .events(onClick)
       .sample($task)
 
-    node.subscribeBus(updatedTaskVar.signal.changes, updateBus)
-    node.subscribeBus($deleteTask, deleteBus)
+    val node = div(
+      toggle.node,
+      child <-- $textNode,
+      deleteButton,
+
+      EventStream.merge(
+        $updatedWithIsCompleted,
+        $updatedWithText,
+        $task.changes
+      ) --> updatedTaskVar.writer,
+
+      updatedTaskVar.signal.changes --> updateObserver,
+
+      $deleteTask --> deleteObserver
+    )
 
     new TaskView(taskId, node)
   }

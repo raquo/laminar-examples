@@ -39,20 +39,25 @@ object TaskListView {
       .filter(taskName => taskName != "")
       .map(taskName => CreateRequest(TaskModel(text = taskName)))
 
-    val updateBus = taskBackend.requestBus.writer
-      .contramapWriter[TaskModel](UpdateRequest(_))(owner = node)
-    val deleteBus = taskBackend.requestBus.writer
-      .contramapWriter[TaskModel](DeleteRequest(_))(owner = node)
-
-    node.subscribeBus($addTaskRequest, taskBackend.requestBus.writer)
-
     val tasksVar = Var[List[TaskModel]](Nil)
 
-    taskBackend.$response.foreach {
+    // @Note we had to change from Bus-es to Observers to maintain this pattern.
+
+    val updateObserver = taskBackend.requestBus.writer
+      .contramap[TaskModel](UpdateRequest(_))
+
+    val deleteObserver = taskBackend.requestBus.writer
+      .contramap[TaskModel](DeleteRequest(_))
+
+    node.amend(
+
+      $addTaskRequest --> taskBackend.requestBus.writer,
+
+      taskBackend.$response --> Observer[Response[TaskModel]]({
         case CreateResponse(_, newTask) =>
           tasksVar.update(_ :+ newTask)
         case UpdateResponse(_, updatedTask) =>
-          tasksVar.update{ tasks =>
+          tasksVar.update { tasks =>
             val ix = tasks.indexWhere(_.id == updatedTask.id)
             if (ix >= 0) tasks.updated(ix, updatedTask)
             else tasks
@@ -60,15 +65,16 @@ object TaskListView {
         case DeleteResponse(_, deletedTask) =>
           tasksVar.update(_.filterNot(_.id == deletedTask.id))
         case _ => ()
-    }(owner = node)
+      }),
 
-    newTaskInput <-- focus <-- $addTaskRequest.mapTo(true) // @TODO also do this on validation failure
+      focus <-- $addTaskRequest.mapTo(true), // @TODO also do this on validation failure
 
-    newTaskInput <-- value <-- $addTaskRequest.mapTo("")
+      value <-- $addTaskRequest.mapTo(""),
 
-    node <-- children <-- tasksVar.signal.split(_.id) {
-      (taskId, _, $task) => TaskView(taskId, $task, updateBus, deleteBus).node
-    }
+      children <-- tasksVar.signal.split(_.id) {
+        (taskId, initialTask, $task) => TaskView(taskId, initialTask, $task, updateObserver, deleteObserver).node
+      }
+    )
 
     // All done!
 

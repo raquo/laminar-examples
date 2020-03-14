@@ -135,7 +135,7 @@ object TodoMvcApp {
     input(
       cls("edit"),
       defaultValue <-- $item.map(_.text),
-      autoFocus(true),
+      onMountFocus,
       inContext { thisNode =>
         @inline def updateText = UpdateText(itemId, thisNode.ref.value)
 
@@ -152,10 +152,7 @@ object TodoMvcApp {
       typ("checkbox"),
       checked <-- $item.map(_.completed),
       inContext { thisNode =>
-        // Having a "Toggle" command would have been cheating.
-        // This shows you how to get current value from a Signal if needed.
-        val observedItem = $item.observe(thisNode)
-        onInput.mapTo(UpdateCompleted(itemId, !observedItem.now().completed)) --> commandObserver
+        onInput.mapTo(UpdateCompleted(itemId, completed = thisNode.ref.checked)) --> commandObserver
       }
     )
 
