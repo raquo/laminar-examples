@@ -20,7 +20,7 @@ Note that this TodoMVC app requires a couple CSS files. If the styles are all br
 
 ## Author
 
-Nikita Gazarov – [raquo.com](http://raquo.com)
+Nikita Gazarov – [@raquo](https://twitter.com/raquo)
 
 
 
