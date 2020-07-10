@@ -12,7 +12,7 @@ scalaVersion := "2.13.1"
 
 crossScalaVersions := Seq("2.12.10", "2.13.1")
 
-libraryDependencies += "com.raquo" %%% "laminar" % "0.8.0"
+libraryDependencies += "com.raquo" %%% "laminar" % "0.9.2"
 
 scalaJSUseMainModuleInitializer := true
 
