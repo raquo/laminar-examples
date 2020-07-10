@@ -19,7 +19,7 @@ object Toggle2 {
     val rand = Random.nextInt(99)
 
     val checkbox = input(
-      id := "toggle" + rand,
+      idAttr := "toggle" + rand,
       className := "red",
       `type` := "checkbox",
       inContext(thisNode => onClick.preventDefault.mapTo(thisNode.ref.checked) --> checkedBus)

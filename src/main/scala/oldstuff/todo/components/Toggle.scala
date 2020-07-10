@@ -24,7 +24,7 @@ object Toggle {
     val inputId = "toggle" + Random.nextInt(99)
 
     val checkbox = input(
-      id := inputId,
+      idAttr := inputId,
       className := "red",
       typ := "checkbox"
     )
