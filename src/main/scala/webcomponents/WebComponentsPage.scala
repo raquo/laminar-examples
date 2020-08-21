@@ -1,6 +1,7 @@
 package webcomponents
 
 import com.raquo.laminar.api.L._
+import org.scalajs.dom
 
 object WebComponentsPage {
 
@@ -26,8 +27,14 @@ object WebComponentsPage {
       ),
       p(
         MwcButton(
+          _.id := "myButton",
           _.label <-- actionVar.signal,
-          _.icon := "code"
+          //_.icon := "code",
+          _.styles.mdcThemePrimary := "#ff0000",
+          _ => onClick --> (_ => dom.window.alert("Click")), // standard event
+          _.onMouseOver --> (_ => println("MouseOver")), // "custom" event
+          _.slots.icon(span("<>")),
+          //_ => onMountCallback(ctx => ctx.thisNode.ref.doThing()) // doThing is not implemented, just for reference
         )
       )
     )
