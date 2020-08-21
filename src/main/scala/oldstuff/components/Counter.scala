@@ -16,7 +16,7 @@ object Counter {
 
     val countSignal = EventStream
       .merge(incClickBus.events.mapTo(1), decClickBus.events.mapTo(-1))
-      .fold(initial = 0)(_ + _)
+      .foldLeft(initial = 0)(_ + _)
 
     val node = div(
       className := "Counter",
