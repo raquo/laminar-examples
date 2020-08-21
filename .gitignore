@@ -2,3 +2,6 @@ target
 .idea
 
 .DS_Store
+
+# you should probably un-ignore this in your own project
+yarn.lock

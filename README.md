@@ -9,8 +9,8 @@ The stuff in `oldstuff` is old. Duh. I should probably delete most of it.
 How to run:
 
 1) git clone this repo to your local machine
-2) open sbt, type `~fastOptJS`
-3) open `index-fastopt.html` file in your browser (found in `target/scala-2.12/classes`)
+2) open sbt, type `~fastOptJS::webpack`
+3) open `index-fastopt.html` file in your browser (found in `target/scala-2.13/scalajs-bundler/main`)
 4) open browser console to monitor for messages and errors
 
 Now you have `App.scala` running in your browser, and any code changes you make will show up on screen after they get incrementally recompiled (see your sbt shell) and after you reload the page in the browser. Sorry, I don't have much time to spend on this, so there's no Hot / Live Reload or anything like that.
