@@ -15,6 +15,7 @@ object Slider {
   @js.native
   trait RawElement extends js.Object {
     def layout(): Unit
+    def value: Double // is this correct? do we need to define properties twice?
   }
 
   @js.native
