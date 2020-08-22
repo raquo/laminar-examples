@@ -1,6 +1,6 @@
 package webcomponents.material
 
-import com.raquo.domtypes.generic.codecs.StringAsIsCodec
+import com.raquo.domtypes.generic.codecs._
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.builders.HtmlTag
 import com.raquo.laminar.keys.{ReactiveHtmlAttr, ReactiveProp, ReactiveStyle}
@@ -10,36 +10,31 @@ import org.scalajs.dom
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 
-object Button {
+object LinearProgressBar {
 
   @js.native
   trait RawElement extends js.Object {
-    def doThing(): Unit // Note: This is not actually implemented in mwc-button, just an example
+    def open(): Unit
+    def close(): Unit
   }
 
   @js.native
-  @JSImport("@material/mwc-button", JSImport.Default)
+  @JSImport("@material/mwc-linear-progress", JSImport.Default)
   object RawImport extends js.Object
 
   // object-s are lazy so you need to actually use them in your code
   private val _ = RawImport
 
   type Ref = dom.html.Element with RawElement
-  type ModFunction = Button.type => Mod[ReactiveHtmlElement[Ref]]
+  type ModFunction = LinearProgressBar.type => Mod[ReactiveHtmlElement[Ref]]
 
-  private val tag = new HtmlTag[Ref]("mwc-button", void = false)
+  private val tag = new HtmlTag[Ref]("mwc-linear-progress", void = false)
 
-  val id: ReactiveProp[String, String] = idAttr
-
-  val label = new ReactiveHtmlAttr[String]("label", StringAsIsCodec)
-
-  val icon = new ReactiveHtmlAttr[String]("icon", StringAsIsCodec)
-
-  val onMouseOver = new EventProp[dom.MouseEvent]("mouseover")
-
-  object slots {
-    def icon(el: HtmlElement): HtmlElement = el.amend(slot := "icon")
-  }
+  val indeterminate = new ReactiveProp("indeterminate", BooleanAsIsCodec)
+  val reverse = new ReactiveProp("reverse", BooleanAsIsCodec)
+  val closed = new ReactiveProp("closed", BooleanAsIsCodec)
+  val progress = new ReactiveProp("progress", DoubleAsIsCodec)
+  val buffer = new ReactiveProp("buffer", DoubleAsIsCodec)
 
   object styles {
     import com.raquo.domtypes.generic.keys.Style // Laminar aliases ReactiveStyle as Style, but we want the original underlying type here
@@ -48,7 +43,6 @@ object Button {
   }
 
   def apply(mods: ModFunction*): HtmlElement = {
-    tag(mods.map(_(Button)): _*)
+    tag(mods.map(_(LinearProgressBar)): _*)
   }
-
 }
