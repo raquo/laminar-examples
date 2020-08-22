@@ -2,6 +2,7 @@ package webcomponents
 
 import com.raquo.domtypes.generic.codecs.StringAsIsCodec
 import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L
 import com.raquo.laminar.builders.HtmlTag
 import com.raquo.laminar.keys.{ReactiveHtmlAttr, ReactiveProp, ReactiveStyle}
 import com.raquo.laminar.nodes.ReactiveHtmlElement
@@ -16,9 +17,6 @@ object MwcButton {
   trait RawMwcButton extends js.Object {
     def doThing(): Unit // Note: This is not actually implemented in mwc-button, just an example
   }
-
-  // This attr will be moved to Scala DOM Types
-  private val slot = new ReactiveHtmlAttr[String]("slot", StringAsIsCodec)
 
   @js.native
   @JSImport("@material/mwc-button", JSImport.Default)
