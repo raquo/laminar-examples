@@ -4,6 +4,8 @@ import com.raquo.laminar.api.L._
 import org.scalajs.dom
 import webcomponents.material._
 
+import scala.scalajs.js
+
 object WebComponentsPage {
 
   def apply(): Div = {
@@ -74,8 +76,17 @@ object WebComponentsPage {
             _.pin := true,
             _.min := 0,
             _.max := 20,
-            // _ => onMountCallback(ctx => ctx.thisNode.ref.layout()), // failing with TypeError: Cannot read property 'layout' of undefined
-            _.onInput --> (ev => progressVar.set(ev.target.asInstanceOf[Slider.Ref].value / 20)), // is it possible to avoid the cast here?
+             _ => onMountCallback(ctx => {
+               js.timers.setTimeout(1) {
+                 // This component initializes its mdcFoundation asynchronously,
+                 // so we need a short delay before accessing .layout() on it.
+                 // To clarify, thisNode.ref already exists on mount, but the web component's
+                 // implementation of layout() depends on thisNode.ref.mdcFoundation, which is
+                 // populated asynchronously for some reason so it's not available on mount.
+                 dom.console.log(ctx.thisNode.ref.layout())
+               }
+             }),
+            slider => inContext { thisNode => slider.onInput.mapTo(thisNode.ref.value / 20) --> progressVar }
           )
         )
       )
