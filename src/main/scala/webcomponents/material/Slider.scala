@@ -2,6 +2,7 @@ package webcomponents.material
 
 import com.raquo.domtypes.generic.codecs._
 import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L
 import com.raquo.laminar.builders.HtmlTag
 import com.raquo.laminar.keys.{ReactiveProp, ReactiveStyle}
 import com.raquo.laminar.nodes.ReactiveHtmlElement
@@ -26,7 +27,8 @@ object Slider {
   private val _ = RawImport
 
   type Ref = dom.html.Element with RawElement
-  type ModFunction = Slider.type => Mod[ReactiveHtmlElement[Ref]]
+  type El = ReactiveHtmlElement[Ref]
+  type ModFunction = Slider.type => Mod[El]
 
   private val tag = new HtmlTag[Ref]("mwc-slider", void = false)
 
@@ -50,4 +52,8 @@ object Slider {
   def apply(mods: ModFunction*): HtmlElement = {
     tag(mods.map(_(Slider)): _*)
   }
+
+  //def inContext(makeMod: El => ModFunction): Mod[El] = {
+  //  L.inContext { thisNode => makeMod(thisNode)(this) }
+  //}
 }
