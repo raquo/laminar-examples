@@ -18,6 +18,10 @@ libraryDependencies += "com.raquo" %%% "laminar" % "0.10.2"
 
 npmDependencies in Compile += "@material/mwc-button" -> "0.18.0"
 
+npmDependencies in Compile += "@material/mwc-linear-progress" -> "0.18.0"
+
+npmDependencies in Compile += "@material/mwc-slider" -> "0.18.0"
+
 scalaJSUseMainModuleInitializer := true
 
 scalaJSLinkerConfig in (Compile, fastOptJS) ~= { _.withSourceMap(false) }
