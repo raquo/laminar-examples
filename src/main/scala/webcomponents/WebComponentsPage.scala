@@ -30,7 +30,7 @@ object WebComponentsPage {
       p(
         "The button below is a ",
         a(
-          href := "",
+          href := "https://github.com/material-components/material-components-web-components/tree/master/packages/button",
           "@material/mwc-button"
         ),
         " web component"
@@ -48,10 +48,26 @@ object WebComponentsPage {
         )
       ),
       p(
+        p(
+          "The progress bar below is a ",
+          a(
+            href := "https://github.com/material-components/material-components-web-components/tree/master/packages/linear-progress",
+            "@material/mwc-linear-progress"
+          ),
+          " web component"
+        ),
         div(
           LinearProgressBar(
             _.progress <-- progressVar.signal,
           )
+        ),
+        p(
+          "The slider below is a ",
+          a(
+            href := "https://github.com/material-components/material-components-web-components/tree/master/packages/slider",
+            "@material/mwc-slider"
+          ),
+          " web component"
         ),
         div(
           Slider(
