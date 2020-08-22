@@ -26,6 +26,7 @@ object MwcButton {
   private val _ = RawMwcButton
 
   type Ref = dom.html.Element with RawMwcButton
+  type ModFunction = MwcButton.type => Mod[ReactiveHtmlElement[Ref]]
 
   private val tag = new HtmlTag[Ref]("mwc-button", void = false)
 
@@ -47,7 +48,7 @@ object MwcButton {
     val mdcThemePrimary = new ReactiveStyle(new Style("--mdc-theme-primary", "--mdc-theme-primary"))
   }
 
-  def apply(mods: MwcButton.type => Mod[ReactiveHtmlElement[Ref]]*): HtmlElement = {
+  def apply(mods: ModFunction*): HtmlElement = {
     tag(mods.map(_(MwcButton)): _*)
   }
 
