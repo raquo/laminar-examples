@@ -11,22 +11,22 @@ import org.scalajs.dom
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 
-object MwcButton {
+object Button {
 
   @js.native
-  trait RawMwcButton extends js.Object {
+  trait RawButton extends js.Object {
     def doThing(): Unit // Note: This is not actually implemented in mwc-button, just an example
   }
 
   @js.native
   @JSImport("@material/mwc-button", JSImport.Default)
-  object RawMwcButton extends js.Object
+  object RawButton extends js.Object
 
   // object-s are lazy so you need to actually use them in your code
-  private val _ = RawMwcButton
+  private val _ = RawButton
 
-  type Ref = dom.html.Element with RawMwcButton
-  type ModFunction = MwcButton.type => Mod[ReactiveHtmlElement[Ref]]
+  type Ref = dom.html.Element with RawButton
+  type ModFunction = Button.type => Mod[ReactiveHtmlElement[Ref]]
 
   private val tag = new HtmlTag[Ref]("mwc-button", void = false)
 
@@ -49,7 +49,7 @@ object MwcButton {
   }
 
   def apply(mods: ModFunction*): HtmlElement = {
-    tag(mods.map(_(MwcButton)): _*)
+    tag(mods.map(_(Button)): _*)
   }
 
 }
