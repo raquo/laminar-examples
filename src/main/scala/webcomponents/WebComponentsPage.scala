@@ -2,7 +2,7 @@ package webcomponents
 
 import com.raquo.laminar.api.L._
 import org.scalajs.dom
-import webcomponents.material.MwcButton
+import webcomponents.material.Button
 
 object WebComponentsPage {
 
@@ -35,7 +35,7 @@ object WebComponentsPage {
         " web component"
       ),
       p(
-        MwcButton(
+        Button(
           _.id := "myButton",
           _.label <-- actionVar.signal,
           //_.icon := "code",
