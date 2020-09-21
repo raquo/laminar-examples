@@ -20,9 +20,7 @@ object Button {
   @js.native
   @JSImport("@material/mwc-button", JSImport.Default)
   object RawImport extends js.Object
-
-  // object-s are lazy so you need to actually use them in your code
-  private val _ = RawImport
+  RawImport // object-s are lazy so you need to actually use them in your code
 
   type Ref = dom.html.Element with RawElement
   type ModFunction = Button.type => Mod[ReactiveHtmlElement[Ref]]
