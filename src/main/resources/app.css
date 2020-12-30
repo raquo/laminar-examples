@@ -9,22 +9,6 @@ body {
   padding: 0;
 }
 
-button {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  font-size: 100%;
-  vertical-align: baseline;
-  font-family: inherit;
-  font-weight: inherit;
-  color: inherit;
-  -webkit-appearance: none;
-  appearance: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 body {
   font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.4em;
@@ -38,10 +22,6 @@ body {
   font-weight: 300;
 }
 
-:focus {
-  outline: 0;
-}
-
 .hidden {
   display: none;
 }
@@ -52,6 +32,22 @@ body {
   position: relative;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
   0 25px 50px 0 rgba(0, 0, 0, 0.1);
+}
+
+.todoapp button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 100%;
+  vertical-align: baseline;
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .todoapp input::-webkit-input-placeholder {
@@ -72,6 +68,9 @@ body {
   color: #e6e6e6;
 }
 
+.todoapp :focus {
+  outline: 0;
+}
 .todoapp h1 {
   position: absolute;
   top: -155px;

@@ -1,3 +1,4 @@
+import ajax.AjaxTester
 import com.raquo.laminar.api.L._
 import oldstuff.intro.DuckMaster
 import oldstuff.pseudotests.SvgContainer
@@ -41,9 +42,10 @@ object App {
   sealed abstract class Example(val caption: String, val init: () => HtmlElement)
 
   case object TodoMVCExample extends Example("TodoMVC", TodoMvcApp.render)
+  case object AjaxExample extends Example("Ajax", AjaxTester.render)
   case object WebComponentsExample extends Example("Web Components", WebComponentsPage.apply)
   case object SvgContainerExample extends Example("SVG Container", SvgContainer.apply)
   case object DuckCounterExample extends Example("Duck Counter", DuckMaster.app)
 
-  val examples: List[Example] = TodoMVCExample :: WebComponentsExample :: SvgContainerExample :: DuckCounterExample :: Nil
+  val examples: List[Example] = DuckCounterExample :: TodoMVCExample :: AjaxExample :: WebComponentsExample :: SvgContainerExample :: Nil
 }
