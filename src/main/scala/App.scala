@@ -45,5 +45,5 @@ object App {
   case object SvgContainerExample extends Example("SVG Container", SvgContainer.apply)
   case object DuckCounterExample extends Example("Duck Counter", DuckMaster.app)
 
-  val examples: List[Example] = TodoMVCExample :: WebComponentsExample :: SvgContainerExample :: Nil
+  val examples: List[Example] = TodoMVCExample :: WebComponentsExample :: SvgContainerExample :: DuckCounterExample :: Nil
 }
