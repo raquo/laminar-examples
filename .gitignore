@@ -6,4 +6,3 @@ target
 .metals
 # you should probably un-ignore this in your own project
 yarn.lock
-node_modules
