@@ -22,12 +22,6 @@ npmDependencies in Compile += "@material/mwc-linear-progress" -> "0.18.0"
 
 npmDependencies in Compile += "@material/mwc-slider" -> "0.18.0"
 
-npmDependencies in Compile += "vega-embed" -> "6.15.1"
-npmDependencies in Compile += "vega" -> "5.19.1"
-npmDependencies in Compile += "vega-lite" -> "4.17.0"
-npmDependencies in Compile += "vega-view" -> "5.9.2"
-
-
 scalaJSUseMainModuleInitializer := true
 
 scalaJSLinkerConfig in (Compile, fastOptJS) ~= { _.withSourceMap(false) }
