@@ -10,11 +10,11 @@ normalizedName := "laminarexamples"
 
 organization := "com.raquo"
 
-scalaVersion := "2.13.1"
+scalaVersion := "2.13.4"
 
-crossScalaVersions := Seq("2.12.10", "2.13.1")
+crossScalaVersions := Seq("2.12.10", "2.13.4")
 
-libraryDependencies += "com.raquo" %%% "laminar" % "0.10.2"
+libraryDependencies += "com.raquo" %%% "laminar" % "0.11.0"
 
 npmDependencies in Compile += "@material/mwc-button" -> "0.18.0"
 
