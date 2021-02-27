@@ -5,7 +5,7 @@ import oldstuff.components.Counter
 
 object DuckMaster {
 
-  def app(): Div = {
+  def apply(): Div = {
     val counter = Counter("Number of ducks")
 
     val summarySignal = counter.countSignal.map { count =>

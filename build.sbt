@@ -14,9 +14,7 @@ scalaVersion := "2.13.4"
 
 crossScalaVersions := Seq("2.12.11", "2.13.4")
 
-libraryDependencies += "com.raquo" %%% "laminar" % "0.11.1-SNAPSHOT"
-
-libraryDependencies += "com.raquo" %%% "airstream" % "0.11.2-SNAPSHOT"
+libraryDependencies += "com.raquo" %%% "laminar" % "0.12.0"
 
 npmDependencies in Compile += "@material/mwc-button" -> "0.18.0"
 

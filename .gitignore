@@ -1,8 +1,11 @@
 target
 .idea
 .bloop
-.DS_Store
+.bsp
 .vscode
 .metals
+
+.DS_Store
+
 # you should probably un-ignore this in your own project
 yarn.lock

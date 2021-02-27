@@ -2,8 +2,6 @@ package webcomponents.material
 
 import com.raquo.domtypes.generic.codecs.StringAsIsCodec
 import com.raquo.laminar.api.L._
-import com.raquo.laminar.builders.HtmlTag
-import com.raquo.laminar.keys.{ReactiveHtmlAttr, ReactiveProp, ReactiveStyle}
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import org.scalajs.dom
 
@@ -23,29 +21,28 @@ object Button {
   RawImport // object-s are lazy so you need to actually use them in your code
 
   type Ref = dom.html.Element with RawElement
-  type ModFunction = Button.type => Mod[ReactiveHtmlElement[Ref]]
+  type El = ReactiveHtmlElement[Ref]
+  type ModFunction = Button.type => Mod[El]
 
-  private val tag = new HtmlTag[Ref]("mwc-button", void = false)
+  private val tag = customHtmlTag[Ref]("mwc-button")
 
-  val id: ReactiveProp[String, String] = idAttr
+  val id: Prop[String] = idAttr
 
-  val label = new ReactiveHtmlAttr[String]("label", StringAsIsCodec)
+  val label: HtmlAttr[String] = customHtmlAttr("label", StringAsIsCodec)
 
-  val icon = new ReactiveHtmlAttr[String]("icon", StringAsIsCodec)
+  val icon: HtmlAttr[String] = customHtmlAttr("icon", StringAsIsCodec)
 
-  val onMouseOver = new EventProp[dom.MouseEvent]("mouseover")
+  val onMouseOver: EventProp[dom.MouseEvent] = customEventProp("mouseover")
 
   object slots {
     def icon(el: HtmlElement): HtmlElement = el.amend(slot := "icon")
   }
 
   object styles {
-    import com.raquo.domtypes.generic.keys.Style // Laminar aliases ReactiveStyle as Style, but we want the original underlying type here
-
-    val mdcThemePrimary = new ReactiveStyle(new Style("--mdc-theme-primary", "--mdc-theme-primary"))
+    val mdcThemePrimary: Style[String] = customStyle("--mdc-theme-primary")
   }
 
-  def apply(mods: ModFunction*): HtmlElement = {
+  def apply(mods: ModFunction*): El = {
     tag(mods.map(_(Button)): _*)
   }
 

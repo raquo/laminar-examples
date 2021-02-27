@@ -20,14 +20,22 @@ object App {
       val appElement = div(
         children <-- maybeChosenApp.signal.map {
           case Some(example) =>
-            example.init() :: Nil
+            example.render() :: Nil
           case None =>
             List(
               h1("Choose example:"),
               ul(
                 fontSize := "130%",
                 lineHeight := "2em",
-                examples.map(ex => li(a(href := "#", ex.caption, onClick.mapTo(Some(ex)) --> maybeChosenApp.writer)))
+                examples.map { ex =>
+                  li(
+                    a(
+                      href := "#",
+                      ex.caption,
+                      onClick.preventDefault.mapTo(Some(ex)) --> maybeChosenApp.writer
+                    )
+                  )
+                }
               ),
               "Get back to this menu by reloading the page."
             )
@@ -39,13 +47,15 @@ object App {
     }(unsafeWindowOwner)
   }
 
-  sealed abstract class Example(val caption: String, val init: () => HtmlElement)
+  sealed abstract class Example(val caption: String, val render: () => HtmlElement)
 
-  case object TodoMVCExample extends Example("TodoMVC", TodoMvcApp.render)
-  case object AjaxExample extends Example("Ajax", AjaxTester.render)
-  case object WebComponentsExample extends Example("Web Components", WebComponentsPage.apply)
-  case object SvgContainerExample extends Example("SVG Container", SvgContainer.apply)
-  case object DuckCounterExample extends Example("Duck Counter", DuckMaster.app)
+  case object TodoMVCExample extends Example("TodoMVC", () => TodoMvcApp())
+  case object AjaxExample extends Example("Ajax", () => AjaxTester())
+  case object WebComponentsExample extends Example("Web Components", () => WebComponentsPage())
+  case object SvgContainerExample extends Example("SVG Container", () => SvgContainer())
+  case object DuckCounterExample extends Example("Duck Counter", () => DuckMaster())
+  //case object ControlledValueTester extends Example("Controlled Value Tester", () => ControlledValue())
+  //case object ControlledCheckedTester extends Example("Controlled Checked Tester", () => ControlledChecked())
 
   val examples: List[Example] = DuckCounterExample :: TodoMVCExample :: AjaxExample :: WebComponentsExample :: SvgContainerExample :: Nil
 }

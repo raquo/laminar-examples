@@ -2,9 +2,6 @@ package webcomponents.material
 
 import com.raquo.domtypes.generic.codecs._
 import com.raquo.laminar.api.L._
-import com.raquo.laminar.api.L
-import com.raquo.laminar.builders.HtmlTag
-import com.raquo.laminar.keys.{ReactiveProp, ReactiveStyle}
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import org.scalajs.dom
 
@@ -16,7 +13,7 @@ object Slider {
   @js.native
   trait RawElement extends js.Object {
     def layout(): Unit
-    def value: Double // is this correct? do we need to define properties twice?
+    def value: Double
   }
 
   @js.native
@@ -28,26 +25,31 @@ object Slider {
   type El = ReactiveHtmlElement[Ref]
   type ModFunction = Slider.type => Mod[El]
 
-  private val tag = new HtmlTag[Ref]("mwc-slider", void = false)
+  private val tag = customHtmlTag[Ref]("mwc-slider")
 
-  val pin = new ReactiveProp("pin", BooleanAsIsCodec)
-  val markers = new ReactiveProp("markers", BooleanAsIsCodec)
-  val value = new ReactiveProp("value", DoubleAsIsCodec)
-  val min = new ReactiveProp("min", DoubleAsIsCodec)
-  val max = new ReactiveProp("max", DoubleAsIsCodec)
-  val step = new ReactiveProp("step", DoubleAsIsCodec)
+  val pin: Prop[Boolean] = customProp("pin", BooleanAsIsCodec)
+
+  val markers: Prop[Boolean] = customProp("markers", BooleanAsIsCodec)
+
+  val value: Prop[Double] = customProp("value", DoubleAsIsCodec)
+
+  val min: Prop[Double] = customProp("min", DoubleAsIsCodec)
+
+  val max: Prop[Double] = customProp("max", DoubleAsIsCodec)
+
+  val step: Prop[Double] = customProp("step", DoubleAsIsCodec)
 
 
-  val onInput = new EventProp[dom.Event]("input")
-  val onChange = new EventProp[dom.Event]("change")
+  val onInput: EventProp[dom.Event] = customEventProp("input")
+
+  val onChange: EventProp[dom.Event] = customEventProp("change")
+
 
   object styles {
-    import com.raquo.domtypes.generic.keys.Style // Laminar aliases ReactiveStyle as Style, but we want the original underlying type here
-
-    val mdcThemeSecondary = new ReactiveStyle(new Style("--mdc-theme-secondary", "--mdc-theme-secondary"))
+    val mdcThemeSecondary: Style[String] = customStyle("--mdc-theme-secondary")
   }
 
-  def apply(mods: ModFunction*): HtmlElement = {
+  def apply(mods: ModFunction*): El = {
     tag(mods.map(_(Slider)): _*)
   }
 
