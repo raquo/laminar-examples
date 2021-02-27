@@ -36,7 +36,7 @@ object TaskView {
       $task.changes.mapTo(false) // possible alternative wording: Val(false).sampledBy($task.changes)
     ).toSignal(initial = false)
 
-    val $textNode = $isEditing.combineWith($task).map2 { (isEditing, task) =>
+    val $textNode = $isEditing.combineWith($task).mapN { (isEditing, task) =>
       if (isEditing) {
         TextInput(
           onMountFocus,

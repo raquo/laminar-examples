@@ -1,7 +1,7 @@
 package ajax
 
 import com.raquo.airstream.web.AjaxEventStream
-import com.raquo.airstream.web.AjaxEventStream.AjaxStreamException
+import com.raquo.airstream.web.AjaxEventStream.AjaxStreamError
 import com.raquo.laminar.api.L._
 import org.scalajs.dom
 
@@ -18,7 +18,7 @@ object AjaxTester {
     AjaxOption("URL that will fail due to CORS restriction", "http://unsplash.com/photos/KDYcgCEoFcY/download?force=true")
   )
 
-  def render(): HtmlElement = {
+  def apply(): HtmlElement = {
     val selectedOptionVar = Var(options.head)
     val pendingRequestVar = Var[Option[dom.XMLHttpRequest]](None)
     val eventsVar = Var(List.empty[String])
@@ -58,7 +58,7 @@ object AjaxTester {
                   }
                 )
                 .map("Response: " + _.responseText)
-                .recover { case err: AjaxStreamException => Some(err.getMessage) }
+                .recover { case err: AjaxStreamError => Some(err.getMessage) }
             }
 
             List(

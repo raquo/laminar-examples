@@ -72,7 +72,7 @@ object TodoMvcApp {
 
   // This is what we expose to the public – a single div element: not a stream, not some virtual DOM representation.
   // You can get the real JS DOM element it manages using its .ref property – that reference does not change over time.
-  def render(): HtmlElement = {
+  def apply(): HtmlElement = {
     div(
       cls("todoapp"),
       div(
@@ -85,7 +85,7 @@ object TodoMvcApp {
         cls("main"),
         ul(
           cls("todo-list"),
-          children <-- itemsVar.signal.combineWith(filterVar.signal).map2(_ filter _.passes).split(_.id)(renderTodoItem)
+          children <-- itemsVar.signal.combineWith(filterVar.signal).mapN(_ filter _.passes).split(_.id)(renderTodoItem)
         )
       ),
       renderStatusBar
