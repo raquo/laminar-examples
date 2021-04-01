@@ -9,6 +9,8 @@ object SvgContainer {
     div(
       "SVG!!!",
       s.svg(
+        // Note: you generally don't need to specify xmlns attribute when building SVGs with scripts (as opposed to downloading)
+        s.xmlns := "http://www.w3.org/2000/svg", // @TODO SvgNamespaces.svg constant when it's available
         s.height := "200",
         s.width := "400",
         s.circle(

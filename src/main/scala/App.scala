@@ -9,15 +9,14 @@ import webcomponents.WebComponentsPage
 object App {
 
   def main(args: Array[String]): Unit = {
-    // Wait until the DOM is loaded, otherwise app-container element might not exist
-    documentEvents.onDomContentLoaded.foreach { _ =>
 
-      val container = document.getElementById("app-container") // This div, its id and contents are defined in index-fastopt.html/index-fullopt.html files
-      container.textContent = ""
+    // This div, its id and contents are defined in index-fastopt.html and index-fullopt.html files
+    lazy val container = document.getElementById("app-container")
 
+    lazy val appElement = {
       val maybeChosenApp = Var[Option[Example]](None)
 
-      val appElement = div(
+      div(
         children <-- maybeChosenApp.signal.map {
           case Some(example) =>
             example.render() :: Nil
@@ -41,10 +40,10 @@ object App {
             )
         }
       )
+    }
 
-      render(container, appElement)
-
-    }(unsafeWindowOwner)
+    // Wait until the DOM is loaded, otherwise app-container element might not exist
+    renderOnDomContentLoaded(container, appElement)
   }
 
   sealed abstract class Example(val caption: String, val render: () => HtmlElement)
@@ -54,8 +53,16 @@ object App {
   case object WebComponentsExample extends Example("Web Components", () => WebComponentsPage())
   case object SvgContainerExample extends Example("SVG Container", () => SvgContainer())
   case object DuckCounterExample extends Example("Duck Counter", () => DuckMaster())
-  //case object ControlledValueTester extends Example("Controlled Value Tester", () => ControlledValue())
-  //case object ControlledCheckedTester extends Example("Controlled Checked Tester", () => ControlledChecked())
+  // case object ControlledValueTester extends Example("Controlled Value Tester", () => ControlledValue())
+  // case object ControlledCheckedTester extends Example("Controlled Checked Tester", () => ControlledChecked())
 
-  val examples: List[Example] = DuckCounterExample :: TodoMVCExample :: AjaxExample :: WebComponentsExample :: SvgContainerExample :: Nil
+  val examples: List[Example] = List(
+    DuckCounterExample,
+    TodoMVCExample,
+    AjaxExample,
+    WebComponentsExample,
+    SvgContainerExample,
+    // ControlledValueTester,
+    // ControlledCheckedTester
+  )
 }
