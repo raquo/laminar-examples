@@ -96,7 +96,7 @@ object TodoMvcApp {
     input(
       cls("new-todo"),
       placeholder("What needs to be done?"),
-      autoFocus(true),
+      onMountFocus,
       inContext { thisNode =>
         // Note: mapTo below accepts parameter by-name, evaluating it on every enter key press
         onEnterPress.mapTo(thisNode.ref.value).filter(_.nonEmpty) -->

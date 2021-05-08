@@ -6,7 +6,7 @@ import webcomponents.material._
 
 import scala.scalajs.js
 
-object WebComponentsPage {
+object WebComponents {
 
   def apply(): Div = {
     val actionVar = Var("Do the thing")

@@ -10,10 +10,9 @@ body {
 }
 
 body {
-  font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.4em;
   background: #f5f5f5;
-  color: #4d4d4d;
   min-width: 230px;
   max-width: 750px;
   margin: 0 auto;
@@ -28,6 +27,9 @@ body {
 
 .todoapp {
   background: #fff;
+  font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  line-height: 1.4em;
+  color: #4d4d4d;
   margin: 130px 0 40px 0;
   position: relative;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),

@@ -17,7 +17,7 @@ object TaskListView {
 
     // Create DOM Nodes
 
-    val newTaskInput = TextInput(autoFocus := true)
+    val newTaskInput = TextInput(onMountFocus)
 
     val addTaskButton = button("Add task")
 

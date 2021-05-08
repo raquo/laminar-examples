@@ -1,44 +1,28 @@
+import ExampleRouter._
 import ajax.AjaxTester
 import com.raquo.laminar.api.L._
+import com.raquo.waypoint._
+import events.{ControlledChecked, ControlledValue}
 import oldstuff.intro.DuckMaster
 import oldstuff.pseudotests.SvgContainer
+import org.scalajs.dom
 import todomvc.TodoMvcApp
-import org.scalajs.dom.document
-import webcomponents.WebComponentsPage
+import webcomponents.WebComponents
 
 object App {
 
   def main(args: Array[String]): Unit = {
 
     // This div, its id and contents are defined in index-fastopt.html and index-fullopt.html files
-    lazy val container = document.getElementById("app-container")
+    lazy val container = dom.document.getElementById("app-container")
 
     lazy val appElement = {
-      val maybeChosenApp = Var[Option[Example]](None)
-
       div(
-        children <-- maybeChosenApp.signal.map {
-          case Some(example) =>
-            example.render() :: Nil
-          case None =>
-            List(
-              h1("Choose example:"),
-              ul(
-                fontSize := "130%",
-                lineHeight := "2em",
-                examples.map { ex =>
-                  li(
-                    a(
-                      href := "#",
-                      ex.caption,
-                      onClick.preventDefault.mapTo(Some(ex)) --> maybeChosenApp.writer
-                    )
-                  )
-                }
-              ),
-              "Get back to this menu by reloading the page."
-            )
-        }
+        child.maybe <-- ExampleRouter.router.$currentPage.map {
+          case HomePage => None
+          case _ => Some(h3(a(navigateTo(HomePage), "Back to home")))
+        },
+        child <-- $selectedApp.$view
       )
     }
 
@@ -46,23 +30,36 @@ object App {
     renderOnDomContentLoaded(container, appElement)
   }
 
-  sealed abstract class Example(val caption: String, val render: () => HtmlElement)
+  private val $selectedApp = SplitRender(ExampleRouter.router.$currentPage)
+    .collectStatic(HomePage)(renderHomePage())
+    .collectStatic(TodoMvcPage)(TodoMvcApp())
+    .collectStatic(AjaxTesterPage)(AjaxTester())
+    .collectStatic(WebComponentsPage)(WebComponents())
+    .collectStatic(SvgContainerPage)(SvgContainer())
+    .collectStatic(DuckCounterPage)(DuckMaster())
+    .collectStatic(ControlledValueTesterPage)(ControlledValue())
+    .collectStatic(ControlledCheckedTesterPage)(ControlledChecked())
 
-  case object TodoMVCExample extends Example("TodoMVC", () => TodoMvcApp())
-  case object AjaxExample extends Example("Ajax", () => AjaxTester())
-  case object WebComponentsExample extends Example("Web Components", () => WebComponentsPage())
-  case object SvgContainerExample extends Example("SVG Container", () => SvgContainer())
-  case object DuckCounterExample extends Example("Duck Counter", () => DuckMaster())
-  // case object ControlledValueTester extends Example("Controlled Value Tester", () => ControlledValue())
-  // case object ControlledCheckedTester extends Example("Controlled Checked Tester", () => ControlledChecked())
+  private def renderHomePage(): HtmlElement = {
+    div(
+      h1("Laminar Examples"),
+      ul(
+        fontSize := "120%",
+        lineHeight := "2em",
+        listStyleType.none,
+        paddingLeft := "0px",
+        linkPages.map { page =>
+          li(a(navigateTo(page), page.title))
+        }
+      )
+    )
+  }
 
-  val examples: List[Example] = List(
-    DuckCounterExample,
-    TodoMVCExample,
-    AjaxExample,
-    WebComponentsExample,
-    SvgContainerExample,
-    // ControlledValueTester,
-    // ControlledCheckedTester
+  val linkPages: List[Page] = List(
+    DuckCounterPage,
+    TodoMvcPage,
+    AjaxTesterPage,
+    WebComponentsPage,
+    SvgContainerPage
   )
 }
