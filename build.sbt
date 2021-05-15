@@ -12,24 +12,24 @@ organization := "com.raquo"
 
 scalaVersion := "2.13.5"
 
-crossScalaVersions := Seq("2.12.11", "2.13.5")
+crossScalaVersions := Seq("2.12.13", "2.13.5", "3.0.0")
 
 libraryDependencies ++= Seq(
   "com.raquo" %%% "laminar" % "0.13.0",
-  "com.lihaoyi" %%% "upickle" % "1.3.12",
+  "com.lihaoyi" %%% "upickle" % "1.3.13",
   "com.raquo" %%% "waypoint" % "0.4.0"
 )
 
-npmDependencies in Compile += "@material/mwc-button" -> "0.18.0"
+Compile / npmDependencies += "@material/mwc-button" -> "0.18.0"
 
-npmDependencies in Compile += "@material/mwc-linear-progress" -> "0.18.0"
+Compile / npmDependencies += "@material/mwc-linear-progress" -> "0.18.0"
 
-npmDependencies in Compile += "@material/mwc-slider" -> "0.18.0"
+Compile / npmDependencies += "@material/mwc-slider" -> "0.18.0"
 
 scalaJSUseMainModuleInitializer := true
 
-scalaJSLinkerConfig in (Compile, fastOptJS) ~= { _.withSourceMap(false) }
+Compile / fastOptJS / scalaJSLinkerConfig ~= { _.withSourceMap(false) }
 
-scalaJSLinkerConfig in (Compile, fullOptJS) ~= { _.withSourceMap(false) }
+Compile / fullOptJS / scalaJSLinkerConfig ~= { _.withSourceMap(false) }
 
 useYarn := true

@@ -53,8 +53,8 @@ object RestBackend {
     val model: Model
   }
 
-  case class ReadResponse[Model](request: Request[Model], model: Model) extends Response[Model]
-  case class CreateResponse[Model](request: Request[Model], model: Model) extends Response[Model]
-  case class UpdateResponse[Model](request: Request[Model], model: Model) extends Response[Model]
-  case class DeleteResponse[Model](request: Request[Model], model: Model) extends Response[Model]
+  case class ReadResponse[Model](request: Request[Model], model: Model) extends ItemResponse[Model]
+  case class CreateResponse[Model](request: Request[Model], model: Model) extends ItemResponse[Model]
+  case class UpdateResponse[Model](request: Request[Model], model: Model) extends ItemResponse[Model]
+  case class DeleteResponse[Model](request: Request[Model], model: Model) extends ItemResponse[Model]
 }
