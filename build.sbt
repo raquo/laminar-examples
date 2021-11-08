@@ -20,6 +20,14 @@ libraryDependencies ++= Seq(
   "com.raquo" %%% "waypoint" % "0.5.0"
 )
 
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-feature",
+  "-language:higherKinds",
+  "-language:implicitConversions",
+  "-language:existentials",
+)
+
 Compile / npmDependencies += "@material/mwc-button" -> "0.18.0"
 
 Compile / npmDependencies += "@material/mwc-linear-progress" -> "0.18.0"
