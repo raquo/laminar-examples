@@ -1,5 +1,6 @@
 import ExampleRouter._
 import ajax.AjaxTester
+import benchmarks.ChildrenBenchmark
 import com.raquo.laminar.api.L._
 import com.raquo.waypoint._
 import events.{ControlledChecked, ControlledValue}
@@ -39,6 +40,7 @@ object App {
     .collectStatic(DuckCounterPage)(DuckMaster())
     .collectStatic(ControlledValueTesterPage)(ControlledValue())
     .collectStatic(ControlledCheckedTesterPage)(ControlledChecked())
+    .collectStatic(ChildrenBenchmarkPage)(ChildrenBenchmark())
 
   private def renderHomePage(): HtmlElement = {
     div(

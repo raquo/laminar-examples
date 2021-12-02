@@ -15,6 +15,7 @@ object ExampleRouter {
   case object DuckCounterPage extends Page("Duck Counter")
   case object ControlledValueTesterPage extends Page("Controlled Value Tester")
   case object ControlledCheckedTesterPage extends Page("Controlled Checked Tester")
+  case object ChildrenBenchmarkPage extends Page("Children Benchmark")
 
   implicit val HomePageRW: ReadWriter[HomePage.type] = macroRW
   implicit val TodoMvcPageRW: ReadWriter[TodoMvcPage.type] = macroRW
@@ -24,6 +25,7 @@ object ExampleRouter {
   implicit val DuckCounterPageRW: ReadWriter[DuckCounterPage.type] = macroRW
   implicit val ControlledValueTesterPageRW: ReadWriter[ControlledValueTesterPage.type] = macroRW
   implicit val ControlledCheckedTesterPageRW: ReadWriter[ControlledCheckedTesterPage.type] = macroRW
+  implicit val ChildrenBenchmarkPageRW: ReadWriter[ChildrenBenchmarkPage.type] = macroRW
 
   implicit val rw: ReadWriter[Page] = macroRW
 
@@ -35,7 +37,8 @@ object ExampleRouter {
     Route.static(SvgContainerPage, root / "svg" / endOfSegments, Router.localFragmentBasePath),
     Route.static(DuckCounterPage, root / "duck-counter" / endOfSegments, Router.localFragmentBasePath),
     Route.static(ControlledValueTesterPage, root / "controlled-value" / endOfSegments, Router.localFragmentBasePath),
-    Route.static(ControlledCheckedTesterPage, root / "controlled-checked" / endOfSegments, Router.localFragmentBasePath)
+    Route.static(ControlledCheckedTesterPage, root / "controlled-checked" / endOfSegments, Router.localFragmentBasePath),
+    Route.static(ChildrenBenchmarkPage, root / "children-benchmark" / endOfSegments, Router.localFragmentBasePath)
   )
 
   val router = new Router[Page](
