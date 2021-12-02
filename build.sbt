@@ -13,9 +13,7 @@ normalizedName := "laminarexamples"
 
 organization := "com.raquo"
 
-scalaVersion := "2.13.10"
-
-crossScalaVersions := Seq("2.12.17", "2.13.10", "3.2.0")
+scalaVersion := "3.2.0"
 
 libraryDependencies ++= Seq(
   "com.raquo" %%% "laminar" % "15.0.0-M6",

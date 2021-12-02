@@ -1,6 +1,6 @@
 package oldstuff.todo.backend
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 import com.raquo.airstream.ownership.Owner
 import oldstuff.todo.backend.RestBackend.{CreateRequest, CreateResponse, DeleteRequest, DeleteResponse, ListRequest, ListResponse, ReadRequest, ReadResponse, Request, Response, UpdateRequest, UpdateResponse}
 import oldstuff.todo.models.TaskModel

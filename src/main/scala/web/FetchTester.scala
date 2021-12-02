@@ -1,6 +1,6 @@
 package web
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 import com.raquo.laminar.api.features.unitArrows
 
 object FetchTester {

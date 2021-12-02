@@ -1,6 +1,6 @@
 package oldstuff.pseudotests
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 import com.raquo.laminar.api.L.{svg => s}
 
 object SvgContainer {

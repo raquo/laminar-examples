@@ -1,6 +1,6 @@
 package oldstuff.todo.views
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 import oldstuff.todo.components.{TextInput, Toggle}
 import oldstuff.todo.models.TaskModel
 import org.scalajs.dom

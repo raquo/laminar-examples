@@ -1,6 +1,6 @@
 package benchmarks
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 import org.scalajs.dom
 
   object ChildrenBenchmark {

@@ -1,8 +1,8 @@
-import com.raquo.laminar.api.L._
-import com.raquo.waypoint._
+import com.raquo.laminar.api.L.{*, given}
+import com.raquo.waypoint.*
 import org.scalajs.dom
-import com.github.plokhotnyuk.jsoniter_scala.core._
-import com.github.plokhotnyuk.jsoniter_scala.macros._
+import com.github.plokhotnyuk.jsoniter_scala.core.*
+import com.github.plokhotnyuk.jsoniter_scala.macros.*
 
 object ExampleRouter {
 
@@ -19,7 +19,7 @@ object ExampleRouter {
   case object ControlledCheckedTesterPage extends Page("Controlled Checked Tester")
   case object ChildrenBenchmarkPage extends Page("Children Benchmark")
 
-  // given codec:
+  // In Scala 3, you can also say `given codec: ...`
   implicit val codec: JsonValueCodec[Page] = JsonCodecMaker.make
 
   private val routes = List(

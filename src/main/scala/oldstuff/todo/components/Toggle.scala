@@ -1,6 +1,6 @@
 package oldstuff.todo.components
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 
 
 import scala.util.Random
