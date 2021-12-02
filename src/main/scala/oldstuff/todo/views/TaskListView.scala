@@ -1,7 +1,7 @@
 package oldstuff.todo.views
 
-import com.raquo.laminar.api.L._
-import oldstuff.todo.backend.RestBackend._
+import com.raquo.laminar.api.L.{*, given}
+import oldstuff.todo.backend.RestBackend.*
 import oldstuff.todo.backend.TaskBackend
 import oldstuff.todo.components.TextInput
 import oldstuff.todo.models.TaskModel

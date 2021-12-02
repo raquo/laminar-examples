@@ -2,7 +2,7 @@ package ajax
 
 import com.raquo.airstream.web.AjaxEventStream
 import com.raquo.airstream.web.AjaxEventStream.AjaxStreamError
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 import org.scalajs.dom
 
 object AjaxTester {

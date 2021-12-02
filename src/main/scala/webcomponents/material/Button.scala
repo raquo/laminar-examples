@@ -1,7 +1,7 @@
 package webcomponents.material
 
 import com.raquo.domtypes.generic.codecs.StringAsIsCodec
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import org.scalajs.dom
 

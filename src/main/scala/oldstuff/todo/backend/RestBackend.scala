@@ -1,10 +1,10 @@
 package oldstuff.todo.backend
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 
 trait RestBackend[Model] {
 
-  import RestBackend._
+  import RestBackend.*
 
   val $request: EventStream[Request[Model]]
 

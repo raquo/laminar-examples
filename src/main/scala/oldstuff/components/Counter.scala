@@ -1,6 +1,6 @@
 package oldstuff.components
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 import org.scalajs.dom
 
 class Counter private (

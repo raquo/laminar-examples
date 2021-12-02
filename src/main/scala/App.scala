@@ -1,7 +1,8 @@
-import ExampleRouter._
+import ExampleRouter.{*, given}
 import ajax.AjaxTester
-import com.raquo.laminar.api.L._
-import com.raquo.waypoint._
+import com.raquo.laminar.api.L.{*, given}
+import com.raquo.laminar.api.L
+import com.raquo.waypoint.*
 import events.{ControlledChecked, ControlledValue}
 import oldstuff.intro.DuckMaster
 import oldstuff.pseudotests.SvgContainer

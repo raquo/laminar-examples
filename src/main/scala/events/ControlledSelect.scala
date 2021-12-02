@@ -1,7 +1,7 @@
 package events
 
 import com.raquo.airstream.core.Source
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 
 object ControlledSelect {
 

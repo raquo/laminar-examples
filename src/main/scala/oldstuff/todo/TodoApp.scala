@@ -1,6 +1,6 @@
 package oldstuff.todo
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 import oldstuff.todo.backend.RestBackend.Request
 import oldstuff.todo.backend.TaskBackend
 import oldstuff.todo.models.TaskModel

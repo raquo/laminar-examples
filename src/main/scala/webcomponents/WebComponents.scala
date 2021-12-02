@@ -1,8 +1,8 @@
 package webcomponents
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 import org.scalajs.dom
-import webcomponents.material._
+import webcomponents.material.*
 
 import scala.scalajs.js
 

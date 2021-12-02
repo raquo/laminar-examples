@@ -1,7 +1,7 @@
-import com.raquo.laminar.api.L._
-import com.raquo.waypoint._
+import com.raquo.laminar.api.L.{*, given}
+import com.raquo.waypoint.*
 import org.scalajs.dom
-import upickle.default._
+import upickle.default.{*, given}
 
 object ExampleRouter {
 

@@ -1,6 +1,6 @@
 package todomvc
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{*, given}
 import org.scalajs.dom.ext.KeyCode
 
 // Laminar is a simple, expressive, and safe UI library for Scala.js
