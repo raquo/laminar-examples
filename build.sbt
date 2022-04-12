@@ -25,7 +25,7 @@ scalacOptions ++= Seq(
   "-feature",
   "-language:higherKinds",
   "-language:implicitConversions",
-  "-language:existentials",
+  "-language:existentials"
 )
 
 Compile / npmDependencies += "@material/mwc-button" -> "0.18.0"
@@ -33,6 +33,10 @@ Compile / npmDependencies += "@material/mwc-button" -> "0.18.0"
 Compile / npmDependencies += "@material/mwc-linear-progress" -> "0.18.0"
 
 Compile / npmDependencies += "@material/mwc-slider" -> "0.18.0"
+
+Compile / npmDependencies += "@material/mwc-tab" -> "0.18.0"
+
+Compile / npmDependencies += "@material/mwc-tab-bar" -> "0.18.0"
 
 scalaJSUseMainModuleInitializer := true
 
