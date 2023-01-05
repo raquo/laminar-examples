@@ -42,7 +42,8 @@ object WebComponents {
           _.id := "myButton",
           _.label <-- actionVar.signal,
           //_.icon := "code",
-          _.styles.mdcThemePrimary := "#ff0000",
+          _.raised := true,
+          _.styles.mdcThemePrimary := "#6200ed",
           _ => onClick --> (_ => dom.window.alert("Click")), // standard event
           _.onMouseOver --> (_ => println("MouseOver")), // "custom" event
           _.slots.icon(span(child.text <-- iconVar.signal)),

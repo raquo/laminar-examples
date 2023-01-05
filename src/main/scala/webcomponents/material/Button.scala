@@ -1,7 +1,7 @@
 package webcomponents.material
 
-import com.raquo.domtypes.generic.codecs.StringAsIsCodec
 import com.raquo.laminar.api.L._
+import com.raquo.laminar.codecs._
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import org.scalajs.dom
 
@@ -24,22 +24,24 @@ object Button {
   type El = ReactiveHtmlElement[Ref]
   type ModFunction = Button.type => Mod[El]
 
-  private val tag = customHtmlTag[Ref]("mwc-button")
+  private val tag = htmlTag[Ref]("mwc-button")
 
-  val id: Prop[String] = idAttr
+  val id: HtmlProp[String] = idAttr
 
-  val label: HtmlAttr[String] = customHtmlAttr("label", StringAsIsCodec)
+  val raised: HtmlProp[Boolean] = htmlProp("raised", BooleanAsIsCodec)
 
-  val icon: HtmlAttr[String] = customHtmlAttr("icon", StringAsIsCodec)
+  val label: HtmlAttr[String] = htmlAttr("label", StringAsIsCodec)
 
-  val onMouseOver: EventProp[dom.MouseEvent] = customEventProp("mouseover")
+  val icon: HtmlAttr[String] = htmlAttr("icon", StringAsIsCodec)
+
+  val onMouseOver: EventProp[dom.MouseEvent] = eventProp("mouseover")
 
   object slots {
     def icon(el: HtmlElement): HtmlElement = el.amend(slot := "icon")
   }
 
   object styles {
-    val mdcThemePrimary: Style[String] = customStyle("--mdc-theme-primary")
+    val mdcThemePrimary: StyleProp[String] = styleProp("--mdc-theme-primary")
   }
 
   def apply(mods: ModFunction*): El = {

@@ -1,7 +1,7 @@
 package todomvc
 
 import com.raquo.laminar.api.L._
-import org.scalajs.dom.ext.KeyCode
+import org.scalajs.dom.KeyCode
 
 // Laminar is a simple, expressive, and safe UI library for Scala.js
 // https://github.com/raquo/Laminar
@@ -157,7 +157,7 @@ object TodoMvcApp {
     )
 
   private def renderStatusBar =
-    footer(
+    footerTag(
       hideIfNoItems,
       cls("footer"),
       span(

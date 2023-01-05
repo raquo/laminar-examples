@@ -1,7 +1,7 @@
 package webcomponents.material
 
-import com.raquo.domtypes.generic.codecs._
 import com.raquo.laminar.api.L._
+import com.raquo.laminar.codecs._
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import org.scalajs.dom
 
@@ -25,28 +25,28 @@ object Slider {
   type El = ReactiveHtmlElement[Ref]
   type ModFunction = Slider.type => Mod[El]
 
-  private val tag = customHtmlTag[Ref]("mwc-slider")
+  private val tag = htmlTag[Ref]("mwc-slider")
 
-  val pin: Prop[Boolean] = customProp("pin", BooleanAsIsCodec)
+  val pin: HtmlProp[Boolean] = htmlProp("pin", BooleanAsIsCodec)
 
-  val markers: Prop[Boolean] = customProp("markers", BooleanAsIsCodec)
+  val markers: HtmlProp[Boolean] = htmlProp("markers", BooleanAsIsCodec)
 
-  val value: Prop[Double] = customProp("value", DoubleAsIsCodec)
+  val value: HtmlProp[Double] = htmlProp("value", DoubleAsIsCodec)
 
-  val min: Prop[Double] = customProp("min", DoubleAsIsCodec)
+  val min: HtmlProp[Double] = htmlProp("min", DoubleAsIsCodec)
 
-  val max: Prop[Double] = customProp("max", DoubleAsIsCodec)
+  val max: HtmlProp[Double] = htmlProp("max", DoubleAsIsCodec)
 
-  val step: Prop[Double] = customProp("step", DoubleAsIsCodec)
+  val step: HtmlProp[Double] = htmlProp("step", DoubleAsIsCodec)
 
 
-  val onInput: EventProp[dom.Event] = customEventProp("input")
+  val onInput: EventProp[dom.Event] = eventProp("input")
 
-  val onChange: EventProp[dom.Event] = customEventProp("change")
+  val onChange: EventProp[dom.Event] = eventProp("change")
 
 
   object styles {
-    val mdcThemeSecondary: Style[String] = customStyle("--mdc-theme-secondary")
+    val mdcThemeSecondary: StyleProp[String] = styleProp("--mdc-theme-secondary")
   }
 
   def apply(mods: ModFunction*): El = {

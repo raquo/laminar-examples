@@ -10,6 +10,7 @@ object ExampleRouter {
   case object HomePage extends Page("Home")
   case object TodoMvcPage extends Page("Todo MVC")
   case object AjaxTesterPage extends Page("Ajax Tester")
+  case object FetchTesterPage extends Page("Fetch Tester")
   case object WebComponentsPage extends Page("Web Components")
   case object SvgContainerPage extends Page("SVG Container")
   case object DuckCounterPage extends Page("Duck Counter")
@@ -20,6 +21,7 @@ object ExampleRouter {
   implicit val HomePageRW: ReadWriter[HomePage.type] = macroRW
   implicit val TodoMvcPageRW: ReadWriter[TodoMvcPage.type] = macroRW
   implicit val AjaxTesterPageRW: ReadWriter[AjaxTesterPage.type] = macroRW
+  implicit val FetchTesterPageRW: ReadWriter[FetchTesterPage.type] = macroRW
   implicit val WebComponentsPageRW: ReadWriter[WebComponentsPage.type] = macroRW
   implicit val SvgContainerPageRW: ReadWriter[SvgContainerPage.type] = macroRW
   implicit val DuckCounterPageRW: ReadWriter[DuckCounterPage.type] = macroRW
@@ -33,6 +35,7 @@ object ExampleRouter {
     Route.static(HomePage, root / endOfSegments, Router.localFragmentBasePath),
     Route.static(TodoMvcPage, root / "todo-mvc" / endOfSegments, Router.localFragmentBasePath),
     Route.static(AjaxTesterPage, root / "ajax" / endOfSegments, Router.localFragmentBasePath),
+    Route.static(FetchTesterPage, root / "fetch" / endOfSegments, Router.localFragmentBasePath),
     Route.static(WebComponentsPage, root / "web-components" / endOfSegments, Router.localFragmentBasePath),
     Route.static(SvgContainerPage, root / "svg" / endOfSegments, Router.localFragmentBasePath),
     Route.static(DuckCounterPage, root / "duck-counter" / endOfSegments, Router.localFragmentBasePath),
@@ -47,7 +50,7 @@ object ExampleRouter {
     serializePage = page => write(page)(rw), // serialize page data for storage in History API log
     deserializePage = pageStr => read(pageStr)(rw) // deserialize the above
   )(
-    $popStateEvent = windowEvents.onPopState, // this is how Waypoint avoids an explicit dependency on Laminar
+    popStateEvents = windowEvents(_.onPopState), // this is how Waypoint avoids an explicit dependency on Laminar
     owner = unsafeWindowOwner // this router will live as long as the window
   )
 

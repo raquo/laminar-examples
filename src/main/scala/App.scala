@@ -1,5 +1,4 @@
 import ExampleRouter._
-import ajax.AjaxTester
 import benchmarks.ChildrenBenchmark
 import com.raquo.laminar.api.L._
 import com.raquo.waypoint._
@@ -8,6 +7,7 @@ import oldstuff.intro.DuckMaster
 import oldstuff.pseudotests.SvgContainer
 import org.scalajs.dom
 import todomvc.TodoMvcApp
+import web.{AjaxTester, FetchTester}
 import webcomponents.WebComponents
 
 object App {
@@ -19,11 +19,11 @@ object App {
 
     lazy val appElement = {
       div(
-        child.maybe <-- ExampleRouter.router.$currentPage.map {
+        child.maybe <-- ExampleRouter.router.currentPageSignal.map {
           case HomePage => None
           case _ => Some(h3(a(navigateTo(HomePage), "Back to home")))
         },
-        child <-- $selectedApp.$view
+        child <-- $selectedApp.signal
       )
     }
 
@@ -31,10 +31,11 @@ object App {
     renderOnDomContentLoaded(container, appElement)
   }
 
-  private val $selectedApp = SplitRender(ExampleRouter.router.$currentPage)
+  private val $selectedApp = SplitRender(ExampleRouter.router.currentPageSignal)
     .collectStatic(HomePage)(renderHomePage())
     .collectStatic(TodoMvcPage)(TodoMvcApp())
     .collectStatic(AjaxTesterPage)(AjaxTester())
+    .collectStatic(FetchTesterPage)(FetchTester())
     .collectStatic(WebComponentsPage)(WebComponents())
     .collectStatic(SvgContainerPage)(SvgContainer())
     .collectStatic(DuckCounterPage)(DuckMaster())
@@ -61,6 +62,7 @@ object App {
     DuckCounterPage,
     TodoMvcPage,
     AjaxTesterPage,
+    FetchTesterPage,
     WebComponentsPage,
     SvgContainerPage
   )

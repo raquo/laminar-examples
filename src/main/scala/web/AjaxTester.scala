@@ -1,7 +1,6 @@
-package ajax
+package web
 
-import com.raquo.airstream.web.AjaxEventStream
-import com.raquo.airstream.web.AjaxEventStream.AjaxStreamError
+import com.raquo.airstream.web.AjaxStream.AjaxStreamError
 import com.raquo.laminar.api.L._
 import org.scalajs.dom
 
@@ -44,7 +43,7 @@ object AjaxTester {
           inContext { thisNode =>
             val $click = thisNode.events(onClick).sample(selectedOptionVar.signal)
             val $response = $click.flatMap { opt =>
-              AjaxEventStream
+              AjaxStream
                 .get(
                   url = opt.url,
                   // These observers are optional, we're just using them for demo
