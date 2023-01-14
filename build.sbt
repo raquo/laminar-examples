@@ -18,8 +18,8 @@ scalaVersion := "2.13.10"
 crossScalaVersions := Seq("2.12.17", "2.13.10", "3.2.0")
 
 libraryDependencies ++= Seq(
-  "com.raquo" %%% "laminar" % "15.0.0-M1",
-  "com.raquo" %%% "waypoint" % "6.0.0-M1",
+  "com.raquo" %%% "laminar" % "15.0.0-M2",
+  "com.raquo" %%% "waypoint" % "6.0.0-M2",
   "com.lihaoyi" %%% "upickle" % "2.0.0"
 )
 
