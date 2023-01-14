@@ -41,21 +41,16 @@ object ControlledSelect {
       option(value("b"), "B"),
       option(value("c"), "C"),
     ))
-    val dropdown = select(
-      onChange.mapToValue --> log,
-      typ("checkbox"),
-      value <-- selectValue.signal.combineWithFn($children)((v, _) => v),
-      children <-- $children,
-      mods
-    )
     div(
-      inContext { thisNode =>
-        List[Modifier[HtmlElement]](
-          h3("EventBus."),
-          button(thisNode.amend(dropdown)),
-          renderLogger(selectValue.signal, log.events, selectValue.writer)
-        )
-      }
+      h3("EventBus."),
+      select(
+        onChange.mapToValue --> log,
+        typ("checkbox"),
+        value <-- selectValue.signal.combineWithFn($children)((v, _) => v),
+        children <-- $children,
+        mods
+      ),
+      renderLogger(selectValue.signal, log.events, selectValue.writer)
     )
   }
 

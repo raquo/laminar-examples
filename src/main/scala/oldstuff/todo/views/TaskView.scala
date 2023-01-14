@@ -4,7 +4,7 @@ import com.raquo.laminar.api.L._
 import oldstuff.todo.components.{TextInput, Toggle}
 import oldstuff.todo.models.TaskModel
 import org.scalajs.dom
-import org.scalajs.dom.ext.KeyCode
+import org.scalajs.dom.KeyCode
 
 class TaskView(
   val taskId: Int,
@@ -41,9 +41,7 @@ object TaskView {
         TextInput(
           onMountFocus,
           value := task.text,
-          inContext(thisNode => onKeyUp.collect { // this is clunky
-            case ev if ev.keyCode == KeyCode.Enter => thisNode.ref.value
-          } --> textInputBus),
+          onKeyUp.filter(_.keyCode == KeyCode.Enter).mapToValue --> textInputBus
         )
       } else {
         span(

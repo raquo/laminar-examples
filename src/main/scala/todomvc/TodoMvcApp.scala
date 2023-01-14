@@ -99,7 +99,7 @@ object TodoMvcApp {
       onMountFocus,
       inContext { thisNode =>
         // Note: mapTo below accepts parameter by-name, evaluating it on every enter key press
-        onEnterPress.mapTo(thisNode.ref.value).filter(_.nonEmpty) -->
+        onEnterPress.mapToValue.filter(_.nonEmpty) -->
           commandObserver.contramap[String] { text =>
             thisNode.ref.value = "" // clear input
             Create(itemText = text)
@@ -136,14 +136,8 @@ object TodoMvcApp {
       cls("edit"),
       defaultValue <-- $item.map(_.text),
       onMountFocus,
-      inContext { thisNode =>
-        @inline def updateText = UpdateText(itemId, thisNode.ref.value)
-
-        List(
-          onEnterPress.mapTo(updateText) --> updateTextObserver,
-          onBlur.mapTo(updateText) --> updateTextObserver
-        )
-      }
+      onEnterPress.mapToValue.map(UpdateText(itemId, _)) --> updateTextObserver,
+      onBlur.mapToValue.map(UpdateText(itemId, _)) --> updateTextObserver
     )
 
   private def renderCheckboxInput(itemId: Int, $item: Signal[TodoItem]) =
@@ -151,9 +145,7 @@ object TodoMvcApp {
       cls("toggle"),
       typ("checkbox"),
       checked <-- $item.map(_.completed),
-      inContext { thisNode =>
-        onInput.mapTo(UpdateCompleted(itemId, completed = thisNode.ref.checked)) --> commandObserver
-      }
+      onInput.mapToChecked.map(checked => UpdateCompleted(itemId, completed = checked)) --> commandObserver
     )
 
   private def renderStatusBar =

@@ -19,14 +19,14 @@ object WebComponents {
         label("Button label: "),
         input(
           value <-- actionVar.signal,
-          inContext { thisNode => onInput.mapTo(thisNode.ref.value) --> actionVar.writer}
+          onInput.mapToValue --> actionVar
         )
       ),
       p(
         label("Button icon: "),
         input(
           value <-- iconVar.signal,
-          inContext { thisNode => onInput.mapTo(thisNode.ref.value) --> iconVar.writer}
+          onInput.mapToValue --> iconVar
         )
       ),
       p(

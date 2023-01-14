@@ -37,23 +37,18 @@ object ControlledChecked {
   private def renderWithEventBus(lockedTo: Var[Boolean], mods: Mod[Input]*): HtmlElement = {
     val bus = new EventBus[Boolean]
     val log = new EventBus[Boolean]
-    val i = input(
-      onClick.mapToChecked --> log,
-      typ("checkbox"),
-      controlled(
-        checked <-- bus.events,
-        onClick.mapToChecked --> bus.writer.filter[Boolean](_ == lockedTo.now())
-      ),
-      mods
-    )
     div(
-      inContext { thisNode =>
-        List[Modifier[HtmlElement]](
-          h3("EventBus."),
-          button(thisNode.amend(i)),
-          renderLogger(bus.events, log.events, bus.writer)
-        )
-      }
+      h3("EventBus."),
+      input(
+        onClick.mapToChecked --> log,
+        typ("checkbox"),
+        controlled(
+          checked <-- bus.events,
+          onClick.mapToChecked --> bus.writer.filter[Boolean](_ == lockedTo.now())
+        ),
+        mods
+      ),
+      renderLogger(bus.events, log.events, bus.writer)
     )
   }
 
@@ -64,27 +59,23 @@ object ControlledChecked {
       println("- LOG observed = " + checked)
       checked
     } --> log.writer //.delay(100).setDisplayName("- LOG recorded = ").debugLog()
-    val i = input(
-      typ("checkbox"),
-      logMod,
-      onClick.mapToChecked.map { checked =>
-        println("- LOG2 observed = " + checked)
-        checked
-      } --> Observer.empty,
-      controlled(
-        checked <-- v.signal,
-        onClick.mapToChecked --> v.writer.filter[Boolean](_ == lockedTo.now())
-      ),
-      mods
-    )
+
     div(
-      inContext { thisNode =>
-        List[Modifier[HtmlElement]](
-          h3("Var."),
-          button(thisNode.amend(i)),
-          renderLogger(v.signal, log.events, v.writer)
-        )
-      }
+      h3("Var."),
+      input(
+        typ("checkbox"),
+        logMod,
+        onClick.mapToChecked.map { checked =>
+          println("- LOG2 observed = " + checked)
+          checked
+        } --> Observer.empty,
+        controlled(
+          checked <-- v.signal,
+          onClick.mapToChecked --> v.writer.filter[Boolean](_ == lockedTo.now())
+        ),
+        mods
+      ),
+      renderLogger(v.signal, log.events, v.writer)
     )
   }
 }
