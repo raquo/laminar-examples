@@ -11,7 +11,7 @@ object WebComponents {
   def apply(): Div = {
     val actionVar = Var("Do the thing")
     val iconVar = Var("<>")
-    val progressVar = Var(0d)
+    val progressVar = Var(0.0)
 
     div(
       h1("Web Components"),

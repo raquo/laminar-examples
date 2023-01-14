@@ -1,7 +1,8 @@
 import com.raquo.laminar.api.L._
 import com.raquo.waypoint._
 import org.scalajs.dom
-import upickle.default._
+import com.github.plokhotnyuk.jsoniter_scala.core._
+import com.github.plokhotnyuk.jsoniter_scala.macros._
 
 object ExampleRouter {
 
@@ -18,18 +19,8 @@ object ExampleRouter {
   case object ControlledCheckedTesterPage extends Page("Controlled Checked Tester")
   case object ChildrenBenchmarkPage extends Page("Children Benchmark")
 
-  implicit val HomePageRW: ReadWriter[HomePage.type] = macroRW
-  implicit val TodoMvcPageRW: ReadWriter[TodoMvcPage.type] = macroRW
-  implicit val AjaxTesterPageRW: ReadWriter[AjaxTesterPage.type] = macroRW
-  implicit val FetchTesterPageRW: ReadWriter[FetchTesterPage.type] = macroRW
-  implicit val WebComponentsPageRW: ReadWriter[WebComponentsPage.type] = macroRW
-  implicit val SvgContainerPageRW: ReadWriter[SvgContainerPage.type] = macroRW
-  implicit val DuckCounterPageRW: ReadWriter[DuckCounterPage.type] = macroRW
-  implicit val ControlledValueTesterPageRW: ReadWriter[ControlledValueTesterPage.type] = macroRW
-  implicit val ControlledCheckedTesterPageRW: ReadWriter[ControlledCheckedTesterPage.type] = macroRW
-  implicit val ChildrenBenchmarkPageRW: ReadWriter[ChildrenBenchmarkPage.type] = macroRW
-
-  implicit val rw: ReadWriter[Page] = macroRW
+  // given codec:
+  implicit val codec: JsonValueCodec[Page] = JsonCodecMaker.make
 
   private val routes = List(
     Route.static(HomePage, root / endOfSegments, Router.localFragmentBasePath),
@@ -47,8 +38,8 @@ object ExampleRouter {
   val router = new Router[Page](
     routes = routes,
     getPageTitle = _.title, // displayed in the browser tab next to favicon
-    serializePage = page => write(page)(rw), // serialize page data for storage in History API log
-    deserializePage = pageStr => read(pageStr)(rw) // deserialize the above
+    serializePage = page => writeToString(page), // serialize page data for storage in History API log
+    deserializePage = pageStr => readFromString(pageStr) // deserialize the above
   )(
     popStateEvents = windowEvents(_.onPopState), // this is how Waypoint avoids an explicit dependency on Laminar
     owner = unsafeWindowOwner // this router will live as long as the window
