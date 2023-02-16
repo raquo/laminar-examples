@@ -12,6 +12,7 @@ object AjaxTester {
 
   private val options = List(
     AjaxOption("Valid Ajax request", "http://api.zippopotam.us/us/90210"),
+    AjaxOption("Download 10MB file (gives you time to abort)", "http://cachefly.cachefly.net/10mb.test"),
     AjaxOption("Download 100MB file (gives you time to abort)", "http://cachefly.cachefly.net/100mb.test"),
     AjaxOption("URL that will fail due to invalid domain", "http://api.zippopotam.uxx/us/90210"),
     AjaxOption("URL that will fail due to CORS restriction", "http://unsplash.com/photos/KDYcgCEoFcY/download?force=true")
@@ -29,7 +30,7 @@ object AjaxTester {
           input(
             idAttr(option.name),
             typ("radio"),
-            name("ajaxOption"),
+            nameAttr("ajaxOption"),
             checked <-- selectedOptionVar.signal.map(_ == option),
             onChange.mapTo(option) --> selectedOptionVar,
           ),

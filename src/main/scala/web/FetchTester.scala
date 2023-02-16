@@ -1,6 +1,7 @@
 package web
 
 import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.features.unitArrows
 
 object FetchTester {
 
@@ -11,6 +12,7 @@ object FetchTester {
   private val options = List(
     FetchOption("Valid Fetch request", "http://api.zippopotam.us/us/90210"),
     FetchOption("Download 10MB file (gives you time to abort)", "https://cachefly.cachefly.net/10mb.test"),
+    FetchOption("Download 100MB file (gives you time to abort)", "https://cachefly.cachefly.net/100mb.test"),
     FetchOption("URL that will fail due to invalid domain", "http://api.zippopotam.uxx/us/90210"),
     FetchOption("URL that will fail due to CORS restriction", "http://unsplash.com/photos/KDYcgCEoFcY/download?force=true")
   )
@@ -18,7 +20,7 @@ object FetchTester {
   def apply(): HtmlElement = {
     val selectedOptionVar = Var(options.head)
     val eventsVar = Var(List.empty[String])
-    val (abortStream, abort) = EventStream.fromCallback[Unit]
+    val (abortStream, abort) = EventStream.withUnitCallback
 
     div(
       h1("Fetch API Tester"),
@@ -27,7 +29,7 @@ object FetchTester {
           input(
             idAttr(option.name),
             typ("radio"),
-            name("fetchOption"),
+            nameAttr("fetchOption"),
             checked <-- selectedOptionVar.signal.map(_ == option),
             onChange.mapTo(option) --> selectedOptionVar,
           ),
@@ -41,7 +43,7 @@ object FetchTester {
           inContext { thisNode =>
             val $click = thisNode.events(onClick).sample(selectedOptionVar.signal)
             val $response = $click.flatMap { opt =>
-              FetchStream.get(url = opt.url, _.abortStream(abortStream))
+              Fetch.get(url = opt.url, _.abortStream(abortStream))
                 .map(resp => if (resp.length >= 1000) resp.substring(0, 1000) else resp)
                 .map("Response (first 1000 chars): " + _)
                 .recover { case err: Throwable => Some(err.getMessage) }
@@ -56,7 +58,8 @@ object FetchTester {
         " ",
         button(
           "Abort",
-          onClick.mapTo(()) --> abort  // #nc
+          onClick --> abort() // #Note: using advanced Laminar syntax feature – see `unitArrows` import.
+          // onClick.mapTo(()) --> abort
         )
       ),
       div(
