@@ -17,7 +17,7 @@ Now you have `App.scala` running in your browser, and any code changes you make 
 
 Note that this TodoMVC app requires a couple CSS files. If the styles are all broken when you run it locally, make sure the CSS is loaded properly using browser dev tools. Shouldn't be a problem, but mentioning this just in case, since there's no web server bundled with this project.
 
-These examples are published for Scala 3, however they do not use any new Scala 3 features. If you simply change the Scala version in `build.sbt` and `index-{fast,full}opt.html` files, and change all the wildcard imports from `.*` and `.{*, given}` to `._`, everything here should work in Scala 2 without other code changes.
+These examples are published for Scala 3, however they do not use any new Scala 3 features, so it does not really matter – they'll work just as well in Scala 2. If you really want to run these examples in Scala 2, you can revert [this commit](https://github.com/raquo/laminar-examples/commit/f29829d44edbcc34ff9b7c1c1990686ebe65afda) locally.
 
 ## Author
 
