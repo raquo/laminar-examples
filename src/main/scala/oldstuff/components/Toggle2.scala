@@ -5,7 +5,7 @@ import com.raquo.laminar.api.L.{*, given}
 import scala.util.Random
 
 class Toggle2 private (
-  val $checkedInput: EventStream[Boolean],
+  val checkedInputStream: EventStream[Boolean],
   val node: Div
 )
 
@@ -25,14 +25,14 @@ object Toggle2 {
       onClick.preventDefault.mapToChecked --> checkedBus
     )
 
-    val $captionNode = checkedBus.events.map(checked => span(if (checked) "ON" else "off"))
+    val nodeCaptions = checkedBus.events.map(checked => span(if (checked) "ON" else "off"))
 
     val node = div(
       className := "Toggle",
       checkbox,
       label(forId := "toggle" + rand, caption),
-      " — ",
-      child <-- $captionNode
+      " —" + nbsp,
+      child <-- nodeCaptions
     )
 
     new Toggle2(checkedBus.events, node)

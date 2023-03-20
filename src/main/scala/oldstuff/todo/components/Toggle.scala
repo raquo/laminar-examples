@@ -13,10 +13,10 @@ class Toggle private(
 
 object Toggle {
 
-  /** @param $checkedInput  Stream of user's input, containing desired checked state */
+  /** @param checkedInputStream  Stream of user's input, containing desired checked state */
   class BoundToggle private[Toggle](
     val node: Span,
-    val $checkedInput: EventStream[Boolean]
+    val checkedInputStream: EventStream[Boolean]
   )
 
   def apply(): Toggle = {
@@ -40,16 +40,16 @@ object Toggle {
   }
 
   def apply(
-    $checked: Signal[Boolean],
-    $caption: Signal[String]
+    checkedSignal: Signal[Boolean],
+    captionSignal: Signal[String]
   ): BoundToggle = {
     val toggle = Toggle()
-    toggle.checkbox.amend(checked <-- $checked)
-    toggle.label.amend(child.text <-- $caption)
+    toggle.checkbox.amend(checked <-- checkedSignal)
+    toggle.label.amend(child.text <-- captionSignal)
     // We set preventDefault=true so that the checkbox only updates when a new value is received from $checked
     // Note that we need to use onClick rather than unChange because onChange fires AFTER the checkbox has been checked.
     // onClick event for checkboxes is more or less equivalent to onInput event for text inputs. #frontendLife
-    val $checkedInput = toggle.checkbox.events(onClick.preventDefault).mapTo(toggle.checkbox.ref.checked)
-    new BoundToggle(toggle.node, $checkedInput)
+    val checkedInputStream = toggle.checkbox.events(onClick.preventDefault).mapTo(toggle.checkbox.ref.checked)
+    new BoundToggle(toggle.node, checkedInputStream)
   }
 }

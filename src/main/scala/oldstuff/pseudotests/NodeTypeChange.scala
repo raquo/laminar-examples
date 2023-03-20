@@ -6,26 +6,26 @@ import org.scalajs.dom
 
 object NodeTypeChange {
 
-  def boldOrItalic($useB: Observable[Boolean], $bigFont: Observable[Boolean]): Observable[Element] = {
-    val $fontSize = fontSizeStream($bigFont) // @TODO use remember()?
-    $useB.map { useB =>
+  def boldOrItalic(useBold: Observable[Boolean], isBigFont: Observable[Boolean]): Observable[Element] = {
+    val fontSizeStream = makeFontSizeStream(isBigFont)
+    useBold.map { useB =>
       dom.console.warn("useB: " + useB)
       if (useB) {
         b(
           "B",
-          fontSize <-- $fontSize
+          fontSize <-- fontSizeStream
         )
       } else {
         i(
-          fontSize <-- $fontSize,
+          fontSize <-- fontSizeStream,
           "I"
         )
       }
     }
   }
 
-  def fontSizeStream($big: Observable[Boolean]): Observable[String] = {
-    $big.map(ok => if (ok) {
+  def makeFontSizeStream(isBig: Observable[Boolean]): Observable[String] = {
+    isBig.map(ok => if (ok) {
       "45px"
     } else {
       "30px"
@@ -42,7 +42,7 @@ object NodeTypeChange {
       div(
         toggle.node,
         toggle2.node,
-        child <-- boldOrItalic($useB = toggle.$checkedInput, $bigFont = toggle2.$checkedInput.toSignal(false))
+        child <-- boldOrItalic(useBold = toggle.checkedInputStream, isBigFont = toggle2.checkedInputStream.toSignal(false))
         //        div(
         //          color <-- myColor(toggle.$checked),
         //          b("COLOR")

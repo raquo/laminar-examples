@@ -24,7 +24,7 @@ object App {
           case HomePage => None
           case _ => Some(h3(a(navigateTo(HomePage), "Back to home")))
         },
-        child <-- $selectedApp.signal
+        child <-- selectedAppSignal
       )
     }
 
@@ -32,7 +32,7 @@ object App {
     renderOnDomContentLoaded(container, appElement)
   }
 
-  private val $selectedApp = SplitRender(ExampleRouter.router.currentPageSignal)
+  private val selectedAppSignal = SplitRender(ExampleRouter.router.currentPageSignal)
     .collectStatic(HomePage)(renderHomePage())
     .collectStatic(TodoMvcPage)(TodoMvcApp())
     .collectStatic(AjaxTesterPage)(AjaxTester())
@@ -43,6 +43,7 @@ object App {
     .collectStatic(ControlledValueTesterPage)(ControlledValue())
     .collectStatic(ControlledCheckedTesterPage)(ControlledChecked())
     .collectStatic(ChildrenBenchmarkPage)(ChildrenBenchmark())
+    .signal
 
   private def renderHomePage(): HtmlElement = {
     div(

@@ -10,13 +10,13 @@ class TaskBackend(val requestBus: EventBus[Request[TaskModel]]) extends RestBack
 
   private var items: Map[Int, TaskModel] = Map()
 
-  override val $request: EventStream[Request[TaskModel]] = requestBus.events
+  override val requests: EventStream[Request[TaskModel]] = requestBus.events
 
-  override val $response: EventStream[RestBackend.Response[TaskModel]] = $request.map(processRequest)
+  override val responses: EventStream[RestBackend.Response[TaskModel]] = requests.map(processRequest)
 
   // The logging observer is just to ensure that requests will be processed even if nothing else
   // is listening, because we expect some of those requests to have desired side effects on the backend.
-  $response.addObserver(Observer(onNext = logRequest))(owner = this)
+  responses.addObserver(Observer(onNext = logRequest))(owner = this)
 
   def processRequest(request: Request[TaskModel]): Response[TaskModel] = {
     request match {

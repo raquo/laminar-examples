@@ -6,20 +6,20 @@ import org.scalajs.dom
   object ChildrenBenchmark {
 
   def apply(): HtmlElement = {
-    val $itemCount = Var(1000)
-    val $log = Var(List[HtmlElement]())
+    val itemCountVar = Var(1000)
+    val logVar = Var(List[HtmlElement]())
     var ms = dom.window.performance.now()
     div(
       div(
         h2("Number of elements"),
         input(
           controlled(
-            value <-- $itemCount.signal.map(_.toString),
-            onInput.mapToValue.map(_.toInt) --> $itemCount.writer
+            value <-- itemCountVar.signal.map(_.toString),
+            onInput.mapToValue.map(_.toInt) --> itemCountVar.writer
           )
         ),
       ),
-      child <-- $itemCount.signal.map { itemCount =>
+      child <-- itemCountVar.signal.map { itemCount =>
         val filterText = Var("")
         val items = Var(makeRange(itemCount).map(idx => (idx, s"Item ${idx}")))
         val filteredItems = items.signal.combineWith(filterText.signal).map {

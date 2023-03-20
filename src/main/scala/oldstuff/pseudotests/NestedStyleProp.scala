@@ -18,12 +18,12 @@ object NestedStyleProp {
     val toggle = Toggle2("Big")
     val toggle2 = Toggle2("Red")
 
-    val $fontSize = toggle
-      .$checkedInput
+    val fontSizeStream = toggle
+      .checkedInputStream
 //      .startWith(true)
       .map(checked => if (checked) "45px" else "30px")
-    val $fontColor = toggle2
-      .$checkedInput
+    val fontColorStream = toggle2
+      .checkedInputStream
 //      .startWith(true)
       .map(checked => if (checked) "red" else "lime")
 
@@ -33,9 +33,9 @@ object NestedStyleProp {
 //      toggle.vnode,
       toggle2.node,
       div(
-//        color <-- $fontColor,
-//        fontSize <-- $fontSize,
-        render($fontColor)
+//        color <-- fontColorStream,
+//        fontSize <-- fontSizeStream,
+        render(fontColorStream)
       )
     )
   }

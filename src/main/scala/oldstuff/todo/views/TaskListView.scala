@@ -5,7 +5,7 @@ import oldstuff.todo.backend.RestBackend.*
 import oldstuff.todo.backend.TaskBackend
 import oldstuff.todo.components.TextInput
 import oldstuff.todo.models.TaskModel
-import org.scalajs.dom.ext.KeyCode
+import org.scalajs.dom
 
 class TaskListView private (
     val node: Div
@@ -30,11 +30,11 @@ object TaskListView {
 
     // Setup Data flow
 
-    val $enterPress =
-      newTaskInput.events(onKeyUp).filter(_.keyCode == KeyCode.Enter)
-    val $addTaskClick = addTaskButton.events(onClick)
-    val $addTaskRequest = EventStream
-      .merge($enterPress, $addTaskClick)
+    val enterPresses =
+      newTaskInput.events(onKeyUp).filter(_.keyCode == dom.KeyCode.Enter)
+    val addTaskClicks = addTaskButton.events(onClick)
+    val addTaskRequests = EventStream
+      .merge(enterPresses, addTaskClicks)
       .mapTo(newTaskInput.ref.value)
       .filter(taskName => taskName != "")
       .map(taskName => CreateRequest(TaskModel(text = taskName)))
@@ -51,9 +51,9 @@ object TaskListView {
 
     node.amend(
 
-      $addTaskRequest --> taskBackend.requestBus.writer,
+      addTaskRequests --> taskBackend.requestBus.writer,
 
-      taskBackend.$response --> Observer[Response[TaskModel]]({
+      taskBackend.responses --> Observer[Response[TaskModel]]({
         case CreateResponse(_, newTask) =>
           tasksVar.update(_ :+ newTask)
         case UpdateResponse(_, updatedTask) =>
@@ -67,9 +67,9 @@ object TaskListView {
         case _ => ()
       }),
 
-      focus <-- $addTaskRequest.mapTo(true), // @TODO also do this on validation failure
+      focus <-- addTaskRequests.mapTo(true), // @TODO also do this on validation failure
 
-      value <-- $addTaskRequest.mapTo(""),
+      value <-- addTaskRequests.mapTo(""),
 
       children <-- tasksVar.signal.split(_.id) {
         (taskId, initialTask, $task) => TaskView(taskId, initialTask, $task, updateObserver, deleteObserver).node

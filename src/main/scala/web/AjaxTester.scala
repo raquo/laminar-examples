@@ -43,8 +43,8 @@ object AjaxTester {
         button(
           "Send",
           inContext { thisNode =>
-            val $click = thisNode.events(onClick).sample(selectedOptionVar.signal)
-            val $response = $click.flatMap { opt =>
+            val clicks = thisNode.events(onClick).sample(selectedOptionVar.signal)
+            val responses = clicks.flatMap { opt =>
               AjaxStream
                 .get(
                   url = opt.url,
@@ -63,8 +63,8 @@ object AjaxTester {
             }
 
             List(
-              $click.map(opt => List(s"Starting: GET ${opt.url}")) --> eventsVar.writer, // @TODO remove .writer
-              $response --> eventsVar.updater[String](_ :+ _)
+              clicks.map(opt => List(s"Starting: GET ${opt.url}")) --> eventsVar.writer, // @TODO remove .writer
+              responses --> eventsVar.updater[String](_ :+ _)
             )
           }
         ),

@@ -24,19 +24,19 @@ object TaskView {
     // Render
 
     val toggle = Toggle(
-      $checked = $task.map(_.isCompleted), //.debugWithLabel("$checked"),
-      $caption = Val("") // $task.map(_.text)
+      checkedSignal = $task.map(_.isCompleted), //.debugWithLabel("$checked"),
+      captionSignal = Val("") // $task.map(_.text)
     )
 
     val labelClickBus = new EventBus[dom.MouseEvent]
     val textInputBus = new EventBus[String]
 
-    val $isEditing = EventStream.merge(
+    val isEditingSignal = EventStream.merge(
       labelClickBus.events.mapTo(true),
       $task.changes.mapTo(false) // possible alternative wording: Val(false).sampledBy($task.changes)
     ).toSignal(initial = false)
 
-    val $textNode = $isEditing.combineWith($task).mapN { (isEditing, task) =>
+    val textNodeSignal = isEditingSignal.combineWith($task).mapN { (isEditing, task) =>
       if (isEditing) {
         TextInput(
           onMountFocus,
@@ -55,34 +55,34 @@ object TaskView {
 
     // Bind
 
-    val $isCompletedInput = toggle.$checkedInput //.debugWithLabel("$isCompleteInput")
+    val isCompletedInputStream = toggle.checkedInputStream //.debugWithLabel("$isCompleteInput")
 
     val updatedTaskVar = Var(initial = initialTask)
 
-    val $updatedWithIsCompleted = $isCompletedInput
+    val updatedWithIsCompletedStream = isCompletedInputStream
       .map(newIsCompleted => updatedTaskVar.now().copy(isCompleted = newIsCompleted))
 
-    val $updatedWithText = textInputBus.events
+    val updatedWithTextStream = textInputBus.events
       .map(newText => updatedTaskVar.now().copy(text = newText))
 
-    val $deleteTask = deleteButton
+    val deleteTaskStream = deleteButton
       .events(onClick)
       .sample($task)
 
     val node = div(
       toggle.node,
-      child <-- $textNode,
+      child <-- textNodeSignal,
       deleteButton,
 
       EventStream.merge(
-        $updatedWithIsCompleted,
-        $updatedWithText,
+        updatedWithIsCompletedStream,
+        updatedWithTextStream,
         $task.changes
       ) --> updatedTaskVar.writer,
 
       updatedTaskVar.signal.changes --> updateObserver,
 
-      $deleteTask --> deleteObserver
+      deleteTaskStream --> deleteObserver
     )
 
     new TaskView(taskId, node)

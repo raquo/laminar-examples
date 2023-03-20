@@ -41,17 +41,17 @@ object FetchTester {
         button(
           "Send",
           inContext { thisNode =>
-            val $click = thisNode.events(onClick).sample(selectedOptionVar.signal)
-            val $response = $click.flatMap { opt =>
-              Fetch.get(url = opt.url, _.abortStream(abortStream))
+            val clicks = thisNode.events(onClick).sample(selectedOptionVar.signal)
+            val responses = clicks.flatMap { opt =>
+              FetchStream.get(url = opt.url, _.abortStream(abortStream))
                 .map(resp => if (resp.length >= 1000) resp.substring(0, 1000) else resp)
                 .map("Response (first 1000 chars): " + _)
                 .recover { case err: Throwable => Some(err.getMessage) }
             }
 
             List(
-              $click.map(opt => List(s"Starting: GET ${opt.url}")) --> eventsVar,
-              $response --> eventsVar.updater[String](_ :+ _)
+              clicks.map(opt => List(s"Starting: GET ${opt.url}")) --> eventsVar,
+              responses --> eventsVar.updater[String](_ :+ _)
             )
           }
         ),

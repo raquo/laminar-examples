@@ -6,27 +6,27 @@ trait RestBackend[Model] {
 
   import RestBackend.*
 
-  val $request: EventStream[Request[Model]]
+  val requests: EventStream[Request[Model]]
 
-  val $response: EventStream[Response[Model]]
+  val responses: EventStream[Response[Model]]
 
-  lazy val $listResponse: EventStream[ListResponse[Model]] = $response.collect {
+  lazy val listResponses: EventStream[ListResponse[Model]] = responses.collect {
     case response: ListResponse[Model @unchecked] => response
   }
 
-  lazy val $readResponse: EventStream[ReadResponse[Model]] = $response.collect {
+  lazy val readResponses: EventStream[ReadResponse[Model]] = responses.collect {
     case response: ReadResponse[Model @unchecked] => response
   }
 
-  lazy val $createResponse: EventStream[CreateResponse[Model]] = $response.collect {
+  lazy val createResponses: EventStream[CreateResponse[Model]] = responses.collect {
     case response: CreateResponse[Model @unchecked] => response
   }
 
-  lazy val $updateResponse: EventStream[UpdateResponse[Model]] = $response.collect {
+  lazy val updateResponses: EventStream[UpdateResponse[Model]] = responses.collect {
     case response: UpdateResponse[Model @unchecked] => response
   }
 
-  lazy val $deleteResponse: EventStream[DeleteResponse[Model]] = $response.collect {
+  lazy val deleteResponses: EventStream[DeleteResponse[Model]] = responses.collect {
     case response: DeleteResponse[Model @unchecked] => response
   }
 }

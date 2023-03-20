@@ -36,7 +36,7 @@ object ControlledSelect {
 
   private def renderExternallyControlled(selectValue: Var[String], mods: Mod[Select]*): HtmlElement = {
     val log = new EventBus[String]
-    val $children = Signal.fromValue(List( // @Note if this is EventStream, it's different
+    val optionsSignal = Signal.fromValue(List( // @Note if this is EventStream, it's different
       option(value("a"), "A"),
       option(value("b"), "B"),
       option(value("c"), "C"),
@@ -46,8 +46,8 @@ object ControlledSelect {
       select(
         onChange.mapToValue --> log,
         typ("checkbox"),
-        value <-- selectValue.signal.combineWithFn($children)((v, _) => v),
-        children <-- $children,
+        value <-- selectValue.signal.combineWithFn(optionsSignal)((v, _) => v),
+        children <-- optionsSignal,
         mods
       ),
       renderLogger(selectValue.signal, log.events, selectValue.writer)
