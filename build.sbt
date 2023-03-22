@@ -13,21 +13,21 @@ normalizedName := "laminarexamples"
 
 organization := "com.raquo"
 
-scalaVersion := "3.2.0"
+scalaVersion := Versions.Scala_3
 
 libraryDependencies ++= Seq(
-  "com.raquo" %%% "laminar" % "15.0.0-M6",
-  "com.raquo" %%% "waypoint" % "6.0.0-M4",
-  "com.github.plokhotnyuk.jsoniter-scala" %%% "jsoniter-scala-core" % "2.20.3",
+  "com.raquo" %%% "laminar" % Versions.Laminar,
+  "com.raquo" %%% "waypoint" % Versions.Waypoint,
+  "com.github.plokhotnyuk.jsoniter-scala" %%% "jsoniter-scala-core" % Versions.JsoniterScala,
   // #TODO[Build] Using "provided" for macros instead of "compiler-internal" because IntelliJ does not understand the latter. Not sure if there's any difference.
-  "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % "2.20.3" % "provided"
+  "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % Versions.JsoniterScala % "provided"
 )
 
-(installJsdom / version) := "20.0.3"
+(installJsdom / version) := Versions.JsDom
 
-(webpack / version) := "5.75.0"
+(webpack / version) := Versions.Webpack
 
-(startWebpackDevServer / version) := "4.11.1"
+(startWebpackDevServer / version) := Versions.WebpackDevServer
 
 scalacOptions ++= Seq(
   "-deprecation",
@@ -37,11 +37,11 @@ scalacOptions ++= Seq(
   "-language:existentials",
 )
 
-Compile / npmDependencies += "@material/mwc-button" -> "0.18.0"
+Compile / npmDependencies += "@material/mwc-button" -> Versions.MaterialWebComponents
 
-Compile / npmDependencies += "@material/mwc-linear-progress" -> "0.18.0"
+Compile / npmDependencies += "@material/mwc-linear-progress" -> Versions.MaterialWebComponents
 
-Compile / npmDependencies += "@material/mwc-slider" -> "0.18.0"
+Compile / npmDependencies += "@material/mwc-slider" -> Versions.MaterialWebComponents
 
 Compile / fastOptJS / scalaJSLinkerConfig ~= { _.withSourceMap(false) }
 
