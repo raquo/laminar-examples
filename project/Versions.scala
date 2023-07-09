@@ -1,10 +1,10 @@
 object Versions {
 
-  val Scala_3 = "3.2.0"
+  val Scala_3 = "3.3.0"
 
-  val Laminar = "15.0.0"
+  val Laminar = "16.0.0"
 
-  val Waypoint = "6.0.0"
+  val Waypoint = "7.0.0"
 
   val JsoniterScala = "2.20.3"
 

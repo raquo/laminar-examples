@@ -1,7 +1,7 @@
 package oldstuff.pseudotests
 
-import com.raquo.laminar.api.L.{*, given}
-import com.raquo.laminar.api.L.{svg => s}
+import com.raquo.laminar.api.L.{svg as s, *, given}
+import com.raquo.laminar.keys.SvgAttr
 
 object SvgContainer {
 
@@ -17,7 +17,7 @@ object SvgContainer {
   def simpleSvg(): SvgElement = {
     s.svg(
       // Note: you generally don't need to specify xmlns attribute when building SVGs with scripts (as opposed to downloading)
-      s.xmlns := "http://www.w3.org/2000/svg", // @TODO SvgNamespaces.svg constant when it's available
+      s.xmlns := SvgAttr.svgNamespaceUri,
       s.height := "200",
       s.width := "400",
       s.circle(
