@@ -1,5 +1,11 @@
 # Laminar TodoMVC & Examples 
 
+## Status
+
+> This repo contains a client-only, webpack build setup for Laminar, as well as a few Laminar code examples. I have replaced this repo with **[Laminar Full Stack Demo](https://github.com/raquo/laminar-full-stack-demo/)** – check it out, it is better in every way.
+
+---
+
 This repo contains a TodoMVC implementation and an assortment of random components using my [Laminar](https://github.com/raquo/laminar) reactive UI library for Scala.js.
 
 The standard TodoMVC example is decent Laminar code, except all its Scala code is deliberately put into one file for easier cross-reference. See **[TodoMvcApp.scala](https://github.com/raquo/laminar-examples/blob/master/src/main/scala/todomvc/TodoMvcApp.scala)** for the implementation.
